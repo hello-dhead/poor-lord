@@ -11,7 +11,7 @@ namespace poorlord
         private readonly int ALICE_DAMAGE = 100;
         private readonly float ALICE_ATTACK_DELAY = 2;
 
-        public override void Init(Vector3Int pos, List<ImmediatelyBuff> immediBuff, List<ContinuousBuff> continueBuff, string alicePoolName) // 필요한 스탯 최대체력 체력 공격력 공격범위, 
+        public override void Init(Vector3Int pos, List<ImmediatelyBuff> immediBuff, List<ContinuousBuff> continueBuff) // 필요한 스탯 최대체력 체력 공격력 공격범위, 
         {
             if (UnitAnimator == null)
             {
@@ -29,7 +29,8 @@ namespace poorlord
             Damage = ALICE_DAMAGE;
             AttackDelay = ALICE_ATTACK_DELAY;
 
-            poolName = alicePoolName;
+            unitName = "Alice";
+
             CurrentAttackDelay = 0;
             immediatelyBuffList = immediBuff;
             continuousBuffList = continueBuff;
@@ -43,6 +44,7 @@ namespace poorlord
             // 필요한 구독 추가
             GameManager.Instance.MessageSystem.Subscribe(typeof(TileEnterEvent), this);
             GameManager.Instance.MessageSystem.Subscribe(typeof(DamageEvent), this);
+            GameManager.Instance.MessageSystem.Subscribe(typeof(BattleStageEndEvent), this);
             GameManager.Instance.MessageSystem.Subscribe(typeof(BattleStageEndEvent), this);
 
             // 공격 범위 리스트 추가
@@ -135,8 +137,11 @@ namespace poorlord
                     {
                         currentState = PlayerUnitState.Dead;
                     }
-                    Debug.Log("앨리스 체력" + HP);
                 }
+            }
+            else if (e.GetType() == typeof(BattleStageEndEvent))
+            {
+                Dispose(true);
             }
             else
             {
@@ -188,7 +193,7 @@ namespace poorlord
             Target = null;
 
             if(isRelease == true)
-                PoolManager.Instance.Release<Warrior_Alice>(poolName, this);
+                UnitManager.Instance.ReleaseUnit(unitName, this);
         }
 
         public sealed override IEnumerator Dead()
@@ -206,7 +211,7 @@ namespace poorlord
                 yield return null;
             }
             UnitAnimator.SetBool("dead", false);
-            PoolManager.Instance.Release<Warrior_Alice>(poolName, this);
+            UnitManager.Instance.ReleaseUnit(unitName, this);
         }
 
         private bool CheckRangeTileTarget()
@@ -238,22 +243,13 @@ namespace poorlord
 
         private void AddBlinkCount()
         {
-            UnitAnimator.SetInteger("blink", UnitAnimator.GetInteger("blink") + 1);
+            if(UnitAnimator != null)
+                UnitAnimator.SetInteger("blink", UnitAnimator.GetInteger("blink") + 1);
         }
 
         private void ResetBlinkCount()
         {
             UnitAnimator.SetInteger("blink", 0);
-        }
-
-        public override PlayerUnit GetPrefabs()
-        {
-            return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Warrior_Alice>("Prefabs/Warrior_Alice", "Prefabs/Warrior_Alice");
-        }
-
-        public override String GetKey()
-        {
-            return "Prefabs/Warrior_Alice";
         }
     }
 }

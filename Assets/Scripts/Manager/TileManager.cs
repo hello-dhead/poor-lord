@@ -112,7 +112,7 @@ namespace poorlord
             // 테마 별로 강 생성 확률이 다르다
             if (theme == TileTheme.Grass)
             {
-                riverCreateGen = 75;
+                riverCreateGen = 100;
             }
             else if (theme == TileTheme.Ice)
             {
@@ -129,7 +129,10 @@ namespace poorlord
             CreateObstacle(Random.Range(2, horizontal), horizontal, vertical);
 
             for (int i = 1; i < roadTilePosList.Count - 1; i++)
-                tileList[roadTilePosList[i].x][roadTilePosList[i].z].SetState(TileState.None);
+            {
+                if (tileList[roadTilePosList[i].x][roadTilePosList[i].z].GetState() == TileState.Obstacle)
+                    tileList[roadTilePosList[i].x][roadTilePosList[i].z].SetState(TileState.None);
+            }
         }
         
         // 성 생성
@@ -207,8 +210,12 @@ namespace poorlord
                 DecorationTile bridge = PoolManager.Instance.Create<DecorationTile>("Bridge");
                 bridge.init(new Vector3Int(x, 0, z));
                 decoTileList.Add(new DecoTileListData("Bridge", bridge));
+                tileList[x][z].init(TileState.Bridge, new Vector3(x, (float)-0.5, z), currentWaterMaterial[0], currentWaterMaterial[1], false);
             }
-            tileList[x][z].init(TileState.Water, new Vector3(x, (float)-0.5, z), currentWaterMaterial[0], currentWaterMaterial[1], false);
+            else
+            {
+                tileList[x][z].init(TileState.Water, new Vector3(x, (float)-0.5, z), currentWaterMaterial[0], currentWaterMaterial[1], false);
+            }
         }
 
         // 장애물 생성
@@ -276,6 +283,18 @@ namespace poorlord
 
             tileList.Clear();
             decoTileList.Clear();
+        }
+
+        // 타일에 건물 지을 수 있는지 체크
+        public bool CheckBuildable(int x, int z)
+        {
+            return tileList[x][z].CheckBuildable();
+        }
+
+        // 타일에 유닛을 놓을 수 있는지 체크
+        public bool CheckBuildableUnit(int x, int z)
+        {
+            return tileList[x][z].CheckBuildableUnit();
         }
 
         // 타일에 존재하는 플레이어 유닛 받아오기

@@ -46,14 +46,16 @@ namespace poorlord
         // 매프레임마다 전 프레임때 도착한 리스트를 발행한다.
         public void UpdateFrame(float dt)
         {
-            foreach (var publishEvent in publishEventList)
+            for (int i = 0; i < publishEventList.Count; i++)
             {
                 List<IEventListener> listenerList;
-                if (listenerDictionary.TryGetValue(publishEvent.GetType(), out listenerList) == false)
+                if (listenerDictionary.TryGetValue(publishEventList[i].GetType(), out listenerList) == false)
                     continue;
 
-                foreach (var listener in listenerList)
-                    listener.OnEvent(publishEvent);
+                for (int j = 0; j < listenerList.Count; j++)
+                {
+                    listenerList[j].OnEvent(publishEventList[i]);
+                }
             }
             publishEventList.Clear();
         }

@@ -32,7 +32,7 @@ namespace poorlord
         // 몬스터의 실제 트랜스폼ㄹ
         protected Transform monsterTransform;
 
-        public abstract void Init( int hp, int damage, List<Vector3Int> path, string poolName);
+        public abstract void Init( int hp, int damage, List<Vector3Int> path);
         protected abstract void Walk(float dt);
         protected abstract void SetPath();
         protected abstract bool CheckPlayerUnit();

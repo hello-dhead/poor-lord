@@ -9,7 +9,7 @@ namespace poorlord
         private readonly float SLIME_ATTACK_DELAY = 5;
         private readonly float SLIME_SPEED = 0.5f;
 
-        public sealed override void Init(int slimeHP, int slimeDamage,  List<Vector3Int> path, string slimePoolName) // 필요한 스탯 최대체력 체력 공격력 공격범위, 
+        public sealed override void Init(int slimeHP, int slimeDamage,  List<Vector3Int> path) // 필요한 스탯 최대체력 체력 공격력 공격범위, 
         {
             if (UnitAnimator == null)
             {
@@ -20,6 +20,8 @@ namespace poorlord
                 UnitAnimator.Rebind();
                 UnitAnimator.SetBool("dead", false);
             }
+
+            unitName = "Slime";
 
             spriteRenderer = gameObject.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>();
             spriteRenderer.material.color = new Color(1, 1, 1, 1);
@@ -40,7 +42,6 @@ namespace poorlord
             this.gameObject.transform.position = pathList[0];
             UnitPosition = pathList[0];
 
-            poolName = slimePoolName;
             currentState = MonsterUnitState.SetPath;
 
             GameManager.Instance.AddUpdate(this);
@@ -52,6 +53,8 @@ namespace poorlord
 
         public sealed override void Dispose(bool isRelease)
         {
+            pathList = null;
+
             // 업데이트에서 제거
             GameManager.Instance.RemoveUpdate(this);
 
@@ -61,8 +64,8 @@ namespace poorlord
 
             Target = null;
 
-            if(isRelease == true)
-                PoolManager.Instance.Release<Slime>(poolName, this);
+            if (isRelease == true)
+                UnitManager.Instance.ReleaseUnit(unitName, this);
         }
 
         public sealed override void UpdateFrame(float dt)
@@ -107,7 +110,7 @@ namespace poorlord
                     if (HP <= 0)
                         currentState = MonsterUnitState.Dead;
                 }
-                Debug.Log("슬라임 체력" + HP);
+                //Debug.Log("슬라임 체력" + HP);
             }
             else if (e.GetType() == typeof(PlayerUnitSummonEvent))
             { // 테스트 미정
@@ -129,9 +132,10 @@ namespace poorlord
 
         protected sealed override void Walk(float dt)
         {
-            monsterTransform.Translate(direction * dt * speed);
+            monsterTransform.position = Vector3.MoveTowards(monsterTransform.position, pathList[0], dt * speed);
+            //monsterTransform.Translate(direction * dt * speed);
             // 거리가 특정 거리 이하 일때 발생
-            if (Vector3.Distance(monsterTransform.position, pathList[0]) <= 0.01)
+            if (Vector3.Distance(monsterTransform.position, pathList[0]) <= 0.1)
             {
                 currentState = MonsterUnitState.SetPath;
             }
@@ -203,7 +207,7 @@ namespace poorlord
                 yield return null;
             }
             UnitAnimator.SetBool("dead", false);
-            PoolManager.Instance.Release<Slime>(poolName, this);
+            UnitManager.Instance.ReleaseUnit(unitName, this);
         }
 
         protected sealed override bool CheckPlayerUnit()

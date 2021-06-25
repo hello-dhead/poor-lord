@@ -1,13 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System;
 using UnityEngine;
 using Assets.Scripts.Commons;
 
 namespace poorlord
 {
-    public class GameManager : MonoSingleton<GameManager>
+    public class GameManager : MonoSingleton<GameManager>, IEventListener
     {
+        // 임시
+        public Sprite frame;
+        public Sprite image;
+
         // 매 프레임 업데이트되야하는 해시셋 아직까지는 우선순위가 필요없지만 추후 필요하게 되면 리스트로 교체
         private HashSet<IUpdatable> updateHashSet;
 
@@ -26,6 +31,9 @@ namespace poorlord
         // 카드 관련 모든 처리를 하는 시스템
         public CardSystem CardSystem;
 
+        // 보상 관련 모든 처리를 하는 시스템
+        public RewardSystem RewardSystem;
+
         private int stage = 0;
 
         public void AddUpdate(IUpdatable updatable)
@@ -41,7 +49,8 @@ namespace poorlord
         private void Start()
         {
             Screen.SetResolution(2560, 1440, true);
-            
+            Fade.Instance.FadeOut(0.5f);
+
             updateHashSet = new HashSet<IUpdatable>();
             addUpdateList = new List<IUpdatable>();
             removeUpdateList = new List<IUpdatable>();
@@ -49,24 +58,11 @@ namespace poorlord
             MessageSystem = new MessageSystem();
             BattleSystem = new BattleSystem();
             CardSystem = new CardSystem();
+            RewardSystem = new RewardSystem();
 
-            // JsonUtility.FromJsonOverwrite(savedData, this);
-            //TileManager.Instance.CreateTileMap((TileTheme)Random.Range(0, 3), Random.Range(10, 15), Random.Range(4, 6));
-            TileManager.Instance.CreateTileMap((TileTheme)0, 10, 4);
-            //TileManager.Instance.ReleaseTileMap();
+            MessageSystem.Subscribe(typeof(BattleStageEndEvent), this);
+
             StartBattleStage();
-
-            Warrior_Alice alice = PoolManager.Instance.GetOrCreateObjectPoolFromPath<Warrior_Alice>("Prefabs/Warrior_Alice", "Prefabs/Warrior_Alice");
-            alice.Init(new Vector3Int(3, 0, 0), new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), "Prefabs/Warrior_Alice");
-
-            PlayerUnit alice2 = alice.GetPrefabs();
-            alice2.Init(new Vector3Int(3, 0, 1), new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), "Prefabs/Warrior_Alice");
-            //Warrior_Alice alice2 = PoolManager.Instance.GetOrCreateObjectPoolFromPath<Warrior_Alice>("Prefabs/Warrior_Alice", "Prefabs/Warrior_Alice");
-            //alice2.Init(new Vector3Int(3, 0, 1), new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), "Prefabs/Warrior_Alice");
-            Warrior_Alice alice3 = PoolManager.Instance.GetOrCreateObjectPoolFromPath<Warrior_Alice>("Prefabs/Warrior_Alice", "Prefabs/Warrior_Alice");
-            alice3.Init(new Vector3Int(3, 0, 2), new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), "Prefabs/Warrior_Alice");
-            Warrior_Alice alice4 = PoolManager.Instance.GetOrCreateObjectPoolFromPath<Warrior_Alice>("Prefabs/Warrior_Alice", "Prefabs/Warrior_Alice");
-            alice4.Init(new Vector3Int(3, 0, 3), new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), "Prefabs/Warrior_Alice");
         }
 
         private void Update()
@@ -81,10 +77,11 @@ namespace poorlord
             }
             addUpdateList.Clear();
 
-            foreach (var updatable in removeUpdateList)
+            for (int i = 0; i < removeUpdateList.Count; i++)
             {
-                updateHashSet.Remove(updatable);
+                updateHashSet.Remove(removeUpdateList[i]);
             }
+
             removeUpdateList.Clear();
 
             // 메세지 시스템은 무조건 다른 업데이트돌기 전에 발행 요청한 이벤트들 우선 처리
@@ -96,10 +93,22 @@ namespace poorlord
             }
         }
 
-        private void StartBattleStage()
+        public void StartBattleStage()
         {
+            TileManager.Instance.CreateTileMap((TileTheme)0, 10, 4);
             GameManager.Instance.MessageSystem.Publish(BattleStageStartEvent.Create(stage));
             stage++;
+        }
+
+        public bool OnEvent(IEvent e)
+        {
+            Type eventType = e.GetType();
+            if (eventType == typeof(BattleStageEndEvent))
+            {
+                TileManager.Instance.ReleaseTileMap();
+                return true;
+            }
+            return false;
         }
     }
 }

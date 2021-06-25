@@ -28,8 +28,8 @@ namespace poorlord
 
         protected List<Vector3Int> rangeTile = new List<Vector3Int>();
 
-        // 자기가 속한 pool의 네임
-        protected string poolName;
+        // 자기의 이름
+        protected string unitName;
 
         public void SetMaxHP(int amount)
         {

@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.IO;
+using Assets.Scripts.Commons;
 
 namespace poorlord
 {
@@ -33,10 +35,10 @@ namespace poorlord
         private float currentGoldDelay = 0;
 
         // 골드
-        private int gold = 0;
+        public int Gold { get; private set; }
 
         // 초당 골드 수급량
-        private float supplyGold = 1;
+        private float supplyGold = 0.5f;
 
         // 초기 골드량
         private int stageStartGold = 0;
@@ -47,6 +49,12 @@ namespace poorlord
         // TODO: 나중에 스테이지 별로 소환 시간 다르게 해야하면 데이터 안에 넣는 리팩토링 필요
         private readonly float SUMMON_DELAY = 5;
 
+        // 골드 텍스트 스프라이트
+        private Text goldText = GameObject.Find("GoldText").GetComponent<Text>();
+        // 스테이지 텍스트 스프라이트
+        private Text stageText = GameObject.Find("StageText").GetComponent<Text>();
+
+
         public BattleSystem()
         {
             GameManager.Instance.MessageSystem.Subscribe(typeof(BattleStageStartEvent), this);
@@ -55,6 +63,7 @@ namespace poorlord
         // 스테이지 시작 전 초기화
         private void Init(int stage)
         {
+            stageText.text = (stage +1).ToString();
             // 현재 스테이지의 몬스터 데이터를 들고오고 몬스터의 수를 저장
             currentStageMonsterData = stageGroupData.StageDataGroup[stage].MonsterGroupList;
             currentStageMonsterCount = currentStageMonsterData.Count;
@@ -66,7 +75,7 @@ namespace poorlord
             currentGoldDelay = 0;
 
             // 골드 초기량으로 고정
-            gold = stageStartGold;
+            Gold = stageStartGold;
 
             GameManager.Instance.MessageSystem.Subscribe(typeof(MonsterDeadEvent), this);
 
@@ -83,7 +92,8 @@ namespace poorlord
             if(currentGoldDelay > 1)
             {
                 currentGoldDelay = 0;
-                gold++;
+                Gold++;
+                goldText.text = Gold.ToString();
             }
 
             if (currentSummonDelay >= SUMMON_DELAY)
@@ -91,20 +101,13 @@ namespace poorlord
                 currentSummonDelay = 0;
                 if(summonMonsterIndex < currentStageMonsterCount)
                 {
-                    MonsterData monster = currentStageMonsterData[summonMonsterIndex];
-                    string type = monster.MonsterType;
-                    string path = monster.MonsterPrefabPath;
+                    MonsterData monsterInfo = currentStageMonsterData[summonMonsterIndex];
+                    string type = monsterInfo.MonsterType;
                     List<Vector3Int> monsterPath = monsterPathList[UnityEngine.Random.Range(0, monsterPathList.Count)];
+                    MonsterUnit monster = (MonsterUnit)UnitManager.Instance.CreateUnit(monsterInfo.MonsterType);
 
-                    switch (type)
-                    {
-                        case "Slime":
-                            Slime slime = PoolManager.Instance.GetOrCreateObjectPoolFromPath<Slime>(path, path);
-                            slime.Init(monster.MonsterHP, monster.MonsterDamage, monsterPath, path);
-                            break;
-                        default:
-                            break;
-                    }
+                    monster.Init(monsterInfo.MonsterHP, monsterInfo.MonsterDamage, monsterPath);
+
                     summonMonsterIndex++;
                 }
             }
@@ -127,7 +130,7 @@ namespace poorlord
                 deadMonsterCount++;
                 if (deadMonsterCount >= currentStageMonsterCount)
                 {
-                    EndBattleStage();
+                    CoroutineHandler.Start_Coroutine(EndBattleStage());
                 }
                 return true;
             }
@@ -135,8 +138,13 @@ namespace poorlord
         }
 
         // 배틀 종료
-        private void EndBattleStage()
+        IEnumerator EndBattleStage()
         {
+            yield return new WaitForSeconds(1f);
+            Fade.Instance.FadeIn(1);
+            yield return new WaitForSeconds(1f);
+
+            GameManager.Instance.RemoveUpdate(this);
             GameManager.Instance.MessageSystem.Unsubscribe(typeof(MonsterDeadEvent), this);
             GameManager.Instance.MessageSystem.Publish(BattleStageEndEvent.Create());
         }
@@ -156,10 +164,11 @@ namespace poorlord
         // 골드 사용 비용이 더 높으면 return false 살 수 있으면 돈을 차감하고 return true
         public bool SpendGold(int amount)
         {
-            if(amount > gold)
+            if(amount > Gold)
                 return false;
 
-            gold -= amount;
+            Gold -= amount;
+            goldText.text = Gold.ToString();
             return true;
         }
     }

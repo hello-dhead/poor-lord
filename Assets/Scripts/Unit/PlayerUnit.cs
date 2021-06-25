@@ -27,9 +27,6 @@ namespace poorlord
 
         protected PlayerUnitState currentState = PlayerUnitState.Idle;
 
-        public abstract void Init(Vector3Int pos, List<ImmediatelyBuff> immediBuff, List<ContinuousBuff> continueBuff, string poolName);
-
-        public abstract PlayerUnit GetPrefabs();
-        public abstract String GetKey();
+        public abstract void Init(Vector3Int pos, List<ImmediatelyBuff> immediBuff, List<ContinuousBuff> continueBuff);
     }
 }

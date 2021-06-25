@@ -17,7 +17,6 @@ public class StageData
 public class MonsterData
 {
     public string MonsterType;
-    public string MonsterPrefabPath;
     public int MonsterHP;
     public int MonsterDamage;
 }

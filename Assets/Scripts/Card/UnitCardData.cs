@@ -10,13 +10,14 @@ namespace poorlord
     /// </summary>
     public class UnitCardData : CardData
     {
-        private PlayerUnit unit;
+        private UnitID unit;
         private List<ImmediatelyBuff> immediatelyBuff = new List<ImmediatelyBuff>();
         private List<ContinuousBuff> continuousBuff = new List<ContinuousBuff>();
 
         // 생성자
-        public UnitCardData(int cost, string name, Sprite frame, Sprite image, List<ImmediatelyBuff> immdiBuff, List<ContinuousBuff> contiBuff, PlayerUnit Unit) : base(cost, name, frame, image)
+        public UnitCardData(int cost, string name, Sprite frame, Sprite image, List<ImmediatelyBuff> immdiBuff, List<ContinuousBuff> contiBuff, UnitID unit) : base(cost, name, frame, image)
         {
+            this.unit = unit;
             immediatelyBuff = immdiBuff;
             continuousBuff = contiBuff;
         }
@@ -24,8 +25,12 @@ namespace poorlord
         // 유닛 소환
         public override bool Spend(Vector3Int pos)
         {
-            unit = unit.GetPrefabs();
-            unit.Init(pos, immediatelyBuff, continuousBuff, unit.GetKey());
+            if (TileManager.Instance.CheckBuildableUnit(pos.x, pos.z) && GameManager.Instance.BattleSystem.SpendGold(Cost))
+            {
+                PlayerUnit platerUnit = (PlayerUnit)UnitManager.Instance.CreateUnit(unit);
+                platerUnit.Init(pos, immediatelyBuff, continuousBuff);
+                return true;
+            }
             return false;
         }
 

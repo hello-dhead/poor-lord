@@ -17,8 +17,6 @@ namespace poorlord
         Castle,
         // 플레이어가 세운 벽이 있는 상태
         Wall,
-        // 플레이어 유닛이 있는 상태
-        Unit,
         // 장애물이 있는 상태 = 나무 or 벽
         Obstacle,
         // 물 블럭 상태
@@ -30,7 +28,9 @@ namespace poorlord
     /// </summary>
     public class BasicTile : MonoBehaviour, IEventListener
     {
+        [SerializeField]
         private TileState state = TileState.None;
+
         private Transform tileTransform;
 
         // 해당 타일에 속해있는 몬스터 유닛의 정보 
@@ -146,7 +146,16 @@ namespace poorlord
 
         public bool CheckBuildable()
         {
-            if (state == TileState.None)
+            if ((state == TileState.None) && containPlayerUnit == null && containMonsterUnitList.Count == 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool CheckBuildableUnit()
+        {
+            if ((state == TileState.None || state == TileState.Bridge) && containPlayerUnit == null && containMonsterUnitList.Count == 0)
             {
                 return true;
             }
