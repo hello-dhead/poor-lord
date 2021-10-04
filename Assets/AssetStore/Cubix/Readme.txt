@@ -12,18 +12,18 @@ Cubix 1.0.1
 
 	Features: 
 
-		• 170 Optimized prefabs with shared textures.
-		• 170 None-optimized prefabs for customization.
-		• Pixel-art textures.
-		• A skybox.
-		• Demo scenes for Non-optimized and Optimized assets.
-		• Mobile and browser friendly.
+		?170 Optimized prefabs with shared textures.
+		?170 None-optimized prefabs for customization.
+		?Pixel-art textures.
+		?A skybox.
+		?Demo scenes for Non-optimized and Optimized assets.
+		?Mobile and browser friendly.
 
-		• Support all build player platforms.
+		?Support all build player platforms.
 		
 	Compatible:
 
-		• Unity 5.6.1 or higher.
+		?Unity 5.6.1 or higher.
 
 	Youtube:
 
@@ -201,16 +201,16 @@ Release notes
 
 	Version 1.0.1
 
-		• Add a pixel-art skybox.
-		• Add new demo scenes for skybox and update some other scenes.
-		• Update sample scripts.
+		?Add a pixel-art skybox.
+		?Add new demo scenes for skybox and update some other scenes.
+		?Update sample scripts.
 
 	Version 1.0 (Initial version)
 
-		• Contains 170 Optimized prefabs with shared textures.
-		• Contains 170 None-optimized prefabs for customization.
-		• Pixel-art textures.
-		• Demo scenes for Non-optimized and Optimized.
-		• Mobile and browser friendly.
-		• Support all build player platforms.
-		• Unity 5.6.1 or higher.
+		?Contains 170 Optimized prefabs with shared textures.
+		?Contains 170 None-optimized prefabs for customization.
+		?Pixel-art textures.
+		?Demo scenes for Non-optimized and Optimized.
+		?Mobile and browser friendly.
+		?Support all build player platforms.
+		?Unity 5.6.1 or higher.

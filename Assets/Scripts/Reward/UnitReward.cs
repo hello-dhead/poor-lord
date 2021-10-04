@@ -10,6 +10,8 @@ namespace poorlord
 {
     public class UnitReward : MonoBehaviour, IPointerClickHandler
     {
+        #pragma warning disable CS0649
+
         [SerializeField]
         private Animator animator;
 
@@ -19,15 +21,13 @@ namespace poorlord
         private GameObject reward;
 
         [SerializeField]
-        private List<RewardCard> rewardCardList = new List<RewardCard>();
-
-        private bool isGacha = false;
+        private List<RewardUnitCard> rewardCardList = new List<RewardUnitCard>();
 
         public void OnPointerClick(PointerEventData eventData)
         {
             coinText = GameManager.Instance.RewardSystem.coinText;
             int coin = Int32.Parse(coinText.text);
-            if (coin > 0)
+            if (coin > 0 && GameManager.Instance.RewardSystem.IsGacha == false)
             {
                 coinText.text = (coin - 1).ToString();
                 StartCoroutine("GetReward");
@@ -36,17 +36,17 @@ namespace poorlord
 
         public IEnumerator GetReward()
         {
-            isGacha = true;
+            GameManager.Instance.RewardSystem.IsGacha = true;
             animator.Play("Gacha_Unit_Pay");
             yield return new WaitForSeconds(3f);
 
             for (int i = 0; i < rewardCardList.Count; i++)
             {
-                rewardCardList[i].init((CardValue)UnityEngine.Random.RandomRange(0, 3), (UnitID)UnityEngine.Random.Range(0, (int)UnitID.PlayerUnitMax));
+                rewardCardList[i].Init((CardValue)UnityEngine.Random.Range(0, 3), (UnitID)UnityEngine.Random.Range(0, (int)UnitID.PlayerUnitMax));
             }
 
             reward.SetActive(true);
-            isGacha = false;
+            GameManager.Instance.RewardSystem.IsGacha = false;
         }
     }
 }

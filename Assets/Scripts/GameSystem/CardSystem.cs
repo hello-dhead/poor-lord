@@ -39,6 +39,7 @@ namespace poorlord
         private List<Sprite> cardFrameList;
 
         private Dictionary<UnitID, Sprite> unitSpriteDic;
+        private Dictionary<BlockID, Sprite> blockSpriteDic;
 
         public CardSystem()
         {
@@ -51,8 +52,10 @@ namespace poorlord
             CurrentHand = new List<Card>();
             cardFrameList = new List<Sprite>();
             unitSpriteDic = new Dictionary<UnitID, Sprite>();
+            blockSpriteDic = new Dictionary<BlockID, Sprite>();
 
             CreateUnitSpriteDic();
+            CreateBlockSpriteDic();
 
             cardFrameList.Add(Resources.Load<Sprite>("Sprites/Card/Card_1_Main"));
             cardFrameList.Add(Resources.Load<Sprite>("Sprites/Card/Card_2_Main"));
@@ -80,6 +83,16 @@ namespace poorlord
             {
                 string path = "Sprites/CardUnitSprite/" + Enum.GetName(typeof(UnitID), i);
                 unitSpriteDic.Add((UnitID)i, Resources.Load<Sprite>(path));
+            }
+        }
+
+        // 블럭 스프라이트 딕셔너리 생성
+        private void CreateBlockSpriteDic()
+        {
+            for (int i = 0; i < (int)BlockID.BlockMax; i++)
+            {
+                string path = "Sprites/CardBlockSprite/" + Enum.GetName(typeof(BlockID), i);
+                blockSpriteDic.Add((BlockID)i, Resources.Load<Sprite>(path));
             }
         }
 
@@ -112,7 +125,7 @@ namespace poorlord
         // 여기에서 유닛 카드 만들어 줄때 버프는 무조건 값 복사해서 새로 생성해야함
         private Card CreateCard(CardData card)
         {
-            Card new_card = PoolManager.Instance.GetOrCreateObjectPoolFromPath<Card>("Prefabs/Card", CardPoolKey);
+            Card new_card = PoolManager.Instance.GetOrCreateObjectPoolFromPath<Card>(CardPoolKey, "Prefabs/Card");
             //cardCanvas
             new_card.transform.parent = cardCanvas;
 
@@ -169,12 +182,15 @@ namespace poorlord
         // 기본덱 제작
         private void CreateBasicDeck()
         {
-            CardDeckList.Add(new UnitCardData(1, "Alice", GameManager.Instance.frame, GameManager.Instance.image, new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), UnitID.Alice));
-            CardDeckList.Add(new UnitCardData(1, "Alice", GameManager.Instance.frame, GameManager.Instance.image, new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), UnitID.Alice));
-            CardDeckList.Add(new UnitCardData(1, "Alice", GameManager.Instance.frame, GameManager.Instance.image, new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), UnitID.Alice));
-            CardDeckList.Add(new UnitCardData(1, "Alice", GameManager.Instance.frame, GameManager.Instance.image, new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), UnitID.Alice));
-            CardDeckList.Add(new UnitCardData(1, "Lucy", GameManager.Instance.frame, GameManager.Instance.image, new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), UnitID.Alice));
-            CardDeckList.Add(new UnitCardData(1, "Mari", GameManager.Instance.frame, GameManager.Instance.image, new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), UnitID.Alice));
+            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
+            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
+            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
+            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
+            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
+            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
+
+            CardDeckList.Add(new UnitCardData(3, "Alice", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Alice), new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), UnitID.Alice));
+            CardDeckList.Add(new UnitCardData(3, "Alice", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Alice), new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), UnitID.Alice));
         }
 
         // 유닛ID와 밸류를 기반으로 랜덤한 카드 생성
@@ -184,8 +200,16 @@ namespace poorlord
 
             // TODO : 스킬셋 제대로 갖춰지면 랜덤한 버프 부여
 
-            CardDeckList.Add(new UnitCardData(cost, UnitID.GetName(unit.GetType(), unit), GetCardFrame(value), GetUnitSprite(unit), 
+            CardDeckList.Add(new UnitCardData(cost, UnitID.GetName(unit.GetType(), unit), GetCardFrame(value), GetSprite(unit), 
                 new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), (UnitID)UnityEngine.Random.Range(0, (int)UnitID.PlayerUnitMax)));
+        }
+
+        // 유닛ID와 밸류를 기반으로 랜덤한 카드 생성
+        public void CreateCardData(CardValue value, BlockID block, string name)
+        {
+            int cost = GetUnitValue(value);
+
+            CardDeckList.Add(new MagicCardData(cost, name, GetCardFrame(value), GetSprite(block), block));
         }
 
         public void RemoveCard(Card card)
@@ -203,9 +227,14 @@ namespace poorlord
             return cardFrameList[(int)value];
         }
 
-        public Sprite GetUnitSprite(UnitID unit)
+        public Sprite GetSprite(UnitID unit)
         {
             return unitSpriteDic[unit];
+        }
+
+        public Sprite GetSprite(BlockID block)
+        {
+            return blockSpriteDic[block];
         }
     }
 }

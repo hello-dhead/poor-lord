@@ -19,6 +19,9 @@ namespace poorlord
         // 현재 스테이지 몬스터 데이터
         private List<MonsterData> currentStageMonsterData;
 
+        // 스테이지에 존재하는 몬스터의 리스트
+        private List<MonsterUnit> stageMonsterList = new List<MonsterUnit>();
+
         // 현재 스테이지 total 몬스터 카운트
         private int currentStageMonsterCount;
 
@@ -41,7 +44,7 @@ namespace poorlord
         private float supplyGold = 0.5f;
 
         // 초기 골드량
-        private int stageStartGold = 0;
+        private int stageStartGold = 20;
 
         // 몬스터가 성으로 가는 경로
         private List<List<Vector3Int>> monsterPathList = new List<List<Vector3Int>>();
@@ -104,10 +107,10 @@ namespace poorlord
                     MonsterData monsterInfo = currentStageMonsterData[summonMonsterIndex];
                     string type = monsterInfo.MonsterType;
                     List<Vector3Int> monsterPath = monsterPathList[UnityEngine.Random.Range(0, monsterPathList.Count)];
-                    MonsterUnit monster = (MonsterUnit)UnitManager.Instance.CreateUnit(monsterInfo.MonsterType);
+                    MonsterUnit monster = (MonsterUnit)FieldObjectManager.Instance.CreateUnit(monsterInfo.MonsterType);
 
                     monster.Init(monsterInfo.MonsterHP, monsterInfo.MonsterDamage, monsterPath);
-
+                    stageMonsterList.Add(monster);
                     summonMonsterIndex++;
                 }
             }
@@ -127,6 +130,8 @@ namespace poorlord
             }
             else if (eventType == typeof(MonsterDeadEvent))
             {
+                MonsterDeadEvent monsterDeadEvent = e as MonsterDeadEvent;
+                stageMonsterList.Remove(monsterDeadEvent.DeadUnit);
                 deadMonsterCount++;
                 if (deadMonsterCount >= currentStageMonsterCount)
                 {
@@ -170,6 +175,34 @@ namespace poorlord
             Gold -= amount;
             goldText.text = Gold.ToString();
             return true;
+        }
+
+        // 블럭을 놓았을 때 성까지 진입이 불가능한 몬스터가 있는지 체크
+        public bool CheckOverlapMonsterPath(List<Vector3Int> blockPathList)
+        {
+            // 몬스터성에서 부터 계산
+            if (TileManager.Instance.CheckOverlapPath(monsterPathList[0][0], blockPathList) == false)
+                return false;
+
+            for (int i = 0; i < stageMonsterList.Count; i++)
+            {
+                if (TileManager.Instance.CheckOverlapPath(stageMonsterList[i].GetPathList()[0], blockPathList) == false)
+                    return false;
+            }
+            return true;
+        }
+
+        // 몬스터와 default Path를 새로 설정
+        public void ChangeMonsterPath()
+        {
+            monsterPathList.Clear();
+            for (int i = 0; i < 4; i++)
+                monsterPathList.Add(TileManager.Instance.GetPathFromMonsterCastle());
+
+            for (int i = 0; i < stageMonsterList.Count; i++)
+            {
+                stageMonsterList[i].ChangePath(TileManager.Instance.GetPathFromPos(stageMonsterList[i].GetPathList()[0]));
+            }
         }
     }
 }

@@ -6,8 +6,10 @@ using Assets.Scripts.Commons;
 
 namespace poorlord
 {
+    // 페이드 인, 아웃
     public class Fade : MonoSingleton<Fade>
     {
+        #pragma warning disable CS0649
         [SerializeField]
         private Image fadeImage;
 

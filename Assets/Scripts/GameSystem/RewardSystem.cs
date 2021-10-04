@@ -13,6 +13,8 @@ namespace poorlord
     /// </summary>
     public class RewardSystem :IUpdatable, IEventListener
     {
+        public bool IsGacha = false;
+
         private Canvas rewardCanvas = GameObject.Find("RewardCanvas").GetComponent<Canvas>();
         private Canvas uiCanvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
         private Canvas cardCanvas = GameObject.Find("CardCanvas").GetComponent<Canvas>();
@@ -39,6 +41,7 @@ namespace poorlord
             Init();
 
             yield return new WaitForSeconds(0.5f);
+            SoundManager.Instance.PlayBGM("Reward");
             Fade.Instance.FadeOut(1);
         }
 

@@ -13,14 +13,14 @@ namespace poorlord
     /// </summary>
     public class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler
     {
+        #pragma warning disable CS0649
+
         public CardData CardData { get; private set; }
         public bool IsHold { get; private set; }
 
-        // frameSpriteRenderer.sprite = frameSprite;
         [SerializeField]
         private SpriteRenderer frameSpriteRenderer;
 
-        // imageSpriteRenderer.sprite = ImageSprite;
         [SerializeField]
         private SpriteRenderer imageSpriteRenderer;
         [SerializeField]
@@ -31,7 +31,6 @@ namespace poorlord
         private List<Text> textList;
         [SerializeField]
         private GameObject coin;
-
 
         // 카드 받은 데이터를 기반으로 카드 생성하기
         public void SetCard(CardData cardData)

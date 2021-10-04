@@ -51,7 +51,7 @@ namespace poorlord
             rangeTile.Add(new Vector3Int(0,0,0));
         }
 
-        public sealed override void Dispose(bool isRelease)
+        public sealed override void Dispose(bool isReleaseImmediately)
         {
             pathList = null;
 
@@ -64,8 +64,8 @@ namespace poorlord
 
             Target = null;
 
-            if (isRelease == true)
-                UnitManager.Instance.ReleaseUnit(unitName, this);
+            if (isReleaseImmediately == true)
+                FieldObjectManager.Instance.ReleaseUnit(unitName, this);
         }
 
         public sealed override void UpdateFrame(float dt)
@@ -104,16 +104,16 @@ namespace poorlord
                 DamageEvent DamageEvent = e as DamageEvent;
                 if (DamageEvent.Target == (Unit)this)
                 {
+                    EffectManager.Instance.CreateEffect("SwordImpactRed", this.gameObject.transform.position + new Vector3(-0.1f, 0.4f, 0), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
                     DamageEvent newDamageEvent = DamageEvent.Create(DamageEvent.Publisher, DamageEvent.Target, DamageEvent.Damage);
 
                     HP -= newDamageEvent.Damage;
                     if (HP <= 0)
                         currentState = MonsterUnitState.Dead;
                 }
-                //Debug.Log("슬라임 체력" + HP);
             }
             else if (e.GetType() == typeof(PlayerUnitSummonEvent))
-            { // 테스트 미정
+            {
                 PlayerUnitSummonEvent summonEvent = e as PlayerUnitSummonEvent;
                 if (currentState == MonsterUnitState.Walk)
                 {
@@ -133,7 +133,6 @@ namespace poorlord
         protected sealed override void Walk(float dt)
         {
             monsterTransform.position = Vector3.MoveTowards(monsterTransform.position, pathList[0], dt * speed);
-            //monsterTransform.Translate(direction * dt * speed);
             // 거리가 특정 거리 이하 일때 발생
             if (Vector3.Distance(monsterTransform.position, pathList[0]) <= 0.1)
             {
@@ -207,7 +206,7 @@ namespace poorlord
                 yield return null;
             }
             UnitAnimator.SetBool("dead", false);
-            UnitManager.Instance.ReleaseUnit(unitName, this);
+            FieldObjectManager.Instance.ReleaseUnit(unitName, this);
         }
 
         protected sealed override bool CheckPlayerUnit()

@@ -29,12 +29,22 @@ namespace poorlord
         protected Vector3 direction;
         protected SpriteRenderer spriteRenderer;
 
-        // 몬스터의 실제 트랜스폼ㄹ
+        // 몬스터의 실제 트랜스폼
         protected Transform monsterTransform;
 
         public abstract void Init( int hp, int damage, List<Vector3Int> path);
         protected abstract void Walk(float dt);
         protected abstract void SetPath();
         protected abstract bool CheckPlayerUnit();
+
+        public void ChangePath(List<Vector3Int> newPathList)
+        {
+            pathList = newPathList;
+        }
+
+        public List<Vector3Int> GetPathList()
+        {
+            return pathList;
+        }
     }
 }

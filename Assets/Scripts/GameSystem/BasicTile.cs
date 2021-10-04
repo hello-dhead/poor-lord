@@ -16,7 +16,7 @@ namespace poorlord
         // 몬스터 성, 주인공 성
         Castle,
         // 플레이어가 세운 벽이 있는 상태
-        Wall,
+        PlayerTile,
         // 장애물이 있는 상태 = 나무 or 벽
         Obstacle,
         // 물 블럭 상태

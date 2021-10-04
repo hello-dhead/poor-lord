@@ -9,10 +9,6 @@ namespace poorlord
 {
     public class GameManager : MonoSingleton<GameManager>, IEventListener
     {
-        // 임시
-        public Sprite frame;
-        public Sprite image;
-
         // 매 프레임 업데이트되야하는 해시셋 아직까지는 우선순위가 필요없지만 추후 필요하게 되면 리스트로 교체
         private HashSet<IUpdatable> updateHashSet;
 
@@ -48,7 +44,6 @@ namespace poorlord
 
         private void Start()
         {
-            Screen.SetResolution(2560, 1440, true);
             Fade.Instance.FadeOut(0.5f);
 
             updateHashSet = new HashSet<IUpdatable>();
@@ -96,7 +91,7 @@ namespace poorlord
         public void StartBattleStage()
         {
             TileManager.Instance.CreateTileMap((TileTheme)0, 10, 4);
-            GameManager.Instance.MessageSystem.Publish(BattleStageStartEvent.Create(stage));
+            MessageSystem.Publish(BattleStageStartEvent.Create(stage));
             stage++;
         }
 

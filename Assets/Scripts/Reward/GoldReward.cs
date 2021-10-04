@@ -10,6 +10,8 @@ namespace poorlord
 {
     public class GoldReward : MonoBehaviour, IPointerClickHandler
     {
+        #pragma warning disable CS0649
+
         private Text coinText;
 
         [SerializeField]
@@ -33,13 +35,11 @@ namespace poorlord
         // 최대 시작 골드 개수
         private int maxStartGold = 5;
 
-        private bool isGacha = false;
-
         public void OnPointerClick(PointerEventData eventData)
         {
             coinText = GameManager.Instance.RewardSystem.coinText;
             int coin = Int32.Parse(coinText.text);
-            if (coin > 0 && isGacha == false)
+            if (coin > 0 && GameManager.Instance.RewardSystem.IsGacha == false)
             {
                 coinText.text = (coin-1).ToString();
                 StartCoroutine("GetReward");
@@ -48,7 +48,7 @@ namespace poorlord
 
         public IEnumerator GetReward()
         {
-            isGacha = true;
+            GameManager.Instance.RewardSystem.IsGacha = true;
             animator.Play("Gacha_Gold_Pay");
             yield return new WaitForSeconds(3f);
 
@@ -69,7 +69,7 @@ namespace poorlord
             reward.SetActive(true);
             yield return new WaitForSeconds(2f);
             reward.SetActive(false);
-            isGacha = false;
+            GameManager.Instance.RewardSystem.IsGacha = false;
         }
     }
 }

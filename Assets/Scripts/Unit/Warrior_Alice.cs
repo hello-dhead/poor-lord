@@ -10,6 +10,10 @@ namespace poorlord
         private readonly int ALICE_MAX_HP = 1000;
         private readonly int ALICE_DAMAGE = 100;
         private readonly float ALICE_ATTACK_DELAY = 2;
+        private readonly string ATTACK_EFFECT_NAME = "SlashYellow";
+        private readonly Vector3 ATTACK_EFFECT_POS = new Vector3(-0.5f, 0.2f, 0);
+        private readonly Vector3 ATTACK_EFFECT_SCALE = new Vector3(0.3f, 0.3f, 0.3f);
+        private readonly Quaternion ATTACK_EFFECT_ROTATE = Quaternion.Euler(new Vector3(-90, 90, 0));
 
         public override void Init(Vector3Int pos, List<ImmediatelyBuff> immediBuff, List<ContinuousBuff> continueBuff) // 필요한 스탯 최대체력 체력 공격력 공격범위, 
         {
@@ -77,6 +81,10 @@ namespace poorlord
                     }
                     break;
                 case PlayerUnitState.Idle:
+                    if (CurrentAttackDelay <= AttackDelay)
+                    {
+                        CurrentAttackDelay += dt;
+                    }
                     break;
                 case PlayerUnitState.Attack:
                     if(CurrentAttackDelay > AttackDelay)
@@ -157,8 +165,8 @@ namespace poorlord
         {
             if(Target.HP > 0 && CheckMonsterInRange())
             {
+                StartCoroutine("AttackEffect");
                 UnitAnimator.SetBool("attack", true);
-                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, Damage));   
             }
             else
             {
@@ -170,6 +178,16 @@ namespace poorlord
                     currentState = PlayerUnitState.Idle;
                 }
             }
+        }
+
+        private IEnumerator AttackEffect()
+        {
+            yield return new WaitForSeconds(0.2f);
+
+            if (Target.HP > 0 && CheckMonsterInRange())
+                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, Damage));
+            EffectManager.Instance.CreateEffect(ATTACK_EFFECT_NAME, UnitPosition + ATTACK_EFFECT_POS, ATTACK_EFFECT_SCALE, ATTACK_EFFECT_ROTATE, 2);
+            SoundManager.Instance.PlaySfx("Alice_Attack");
         }
 
         public sealed override void Dispose(bool isRelease)
@@ -193,7 +211,7 @@ namespace poorlord
             Target = null;
 
             if(isRelease == true)
-                UnitManager.Instance.ReleaseUnit(unitName, this);
+                FieldObjectManager.Instance.ReleaseUnit(unitName, this);
         }
 
         public sealed override IEnumerator Dead()
@@ -211,7 +229,7 @@ namespace poorlord
                 yield return null;
             }
             UnitAnimator.SetBool("dead", false);
-            UnitManager.Instance.ReleaseUnit(unitName, this);
+            FieldObjectManager.Instance.ReleaseUnit(unitName, this);
         }
 
         private bool CheckRangeTileTarget()

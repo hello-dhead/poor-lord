@@ -27,7 +27,7 @@ namespace poorlord
         {
             if (TileManager.Instance.CheckBuildableUnit(pos.x, pos.z) && GameManager.Instance.BattleSystem.SpendGold(Cost))
             {
-                PlayerUnit platerUnit = (PlayerUnit)UnitManager.Instance.CreateUnit(unit);
+                PlayerUnit platerUnit = (PlayerUnit)FieldObjectManager.Instance.CreateUnit(unit);
                 platerUnit.Init(pos, immediatelyBuff, continuousBuff);
                 return true;
             }

@@ -13,12 +13,14 @@ namespace poorlord
         private Dictionary<string, ObjectPoolBase> poolDictionary = new Dictionary<string, ObjectPoolBase>();
 
         // key의 값이 있으면 바로 리턴하고 없으면 경로의 프리팹 풀을 생성한 다음 리턴 
-        public T GetOrCreateObjectPoolFromPath<T>(string key, string path, int count = 5) where T : Component, new()
+        public T GetOrCreateObjectPoolFromPath<T>(string path, string key = null, int count = 5) where T : Component, new()
         {
+            // key를 따로 지정해주지 않으면 path가 key가 됨 
+            if (key == null)
+                key = path;
+
             if (poolDictionary.ContainsKey(key) == true)
-            {
                 return Create<T>(key);
-            }
 
             GameObject prefab = Resources.Load<GameObject>(path);
             if (prefab == null)

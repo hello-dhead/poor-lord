@@ -264,6 +264,19 @@ namespace poorlord
             return true;
         }
 
+        // 매개변수로 들어온 타일리스트가 모두 건축이 가능한 타일인지 체크
+        public bool CheckBuildableTileList(List<Vector3Int> checkTileList)
+        {
+            for (int i = 0; i < checkTileList.Count; i++)
+            {
+                if (tileList.Count <= checkTileList[i].x || tileList[0].Count <= checkTileList[i].z || tileList[checkTileList[i].x][checkTileList[i].z].CheckBuildable() == false)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         // 타일맵 해제
         public void ReleaseTileMap()
         {
@@ -321,6 +334,46 @@ namespace poorlord
         public List<Vector3Int> GetPathFromMonsterCastle()
         {
             return GetPathFromPos(monsterCastlePos);
+        }
+
+        // 블락이 추가된다면 지나갈 수 있는 길이 있는지 체크
+        public bool CheckOverlapPath(Vector3Int currentPosition, List<Vector3Int> newBlockPath)
+        {
+            // 맵을 벗어나는 타일이 있으면 무조건 false
+            for (int i = 0; i < newBlockPath.Count; i++)
+            {
+                if (newBlockPath[i].x < 0 || newBlockPath[i].x >= tileList.Count || newBlockPath[i].z < 0 || newBlockPath[i].z >= tileList[0].Count)
+                    return false;
+            }
+
+            // 현재 state 잠시 저장해놓음
+            List<TileState> state = new List<TileState>();
+            for (int i = 0; i < newBlockPath.Count; i++)
+            {
+                state.Add(tileList[newBlockPath[i].x][newBlockPath[i].z].GetState());
+            }
+
+            for (int i = 0; i < newBlockPath.Count; i++)
+            {
+                tileList[newBlockPath[i].x][newBlockPath[i].z].SetState(TileState.PlayerTile);
+            }
+
+            List<Vector3Int> roadTilePosList = pathFinder.GetPath(currentPosition, playerCastlePos, tileList);
+
+            for (int i = 0; i < newBlockPath.Count; i++)
+            {
+                tileList[newBlockPath[i].x][newBlockPath[i].z].SetState(state[i]);
+            }
+            
+            if (roadTilePosList.Count != 0)
+                return true;
+            return false;
+        }
+
+        // 타일의 상태 변경
+        public void ChangeState(Vector3Int pos, TileState state)
+        {
+            tileList[pos.x][pos.z].SetState(state);
         }
     }
 

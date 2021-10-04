@@ -7,6 +7,7 @@ namespace poorlord
 {
     public class DrawButton : MonoBehaviour, IPointerClickHandler
     {
+        #pragma warning disable CS0649
         [SerializeField]
         private Animator animator;
 
