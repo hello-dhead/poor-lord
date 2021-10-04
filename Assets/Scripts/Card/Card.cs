@@ -19,10 +19,10 @@ namespace poorlord
         public bool IsHold { get; private set; }
 
         [SerializeField]
-        private SpriteRenderer frameSpriteRenderer;
+        private Image frameSpriteRenderer;
 
         [SerializeField]
-        private SpriteRenderer imageSpriteRenderer;
+        private Image imageSpriteRenderer;
         [SerializeField]
         private Text nameText;
         [SerializeField]
@@ -82,6 +82,7 @@ namespace poorlord
         public void OnBeginDrag(PointerEventData eventData)
         {
             IsHold = true;
+            gameObject.transform.SetAsLastSibling();
         }
 
         public void OnEndDrag(PointerEventData eventData)
