@@ -165,7 +165,7 @@ namespace poorlord
         {
             if(Target.HP > 0 && CheckMonsterInRange())
             {
-                StartCoroutine("AttackEffect");
+                StartCoroutine("AttackRoutine");
                 UnitAnimator.SetBool("attack", true);
             }
             else
@@ -180,11 +180,11 @@ namespace poorlord
             }
         }
 
-        private IEnumerator AttackEffect()
+        private IEnumerator AttackRoutine()
         {
             yield return new WaitForSeconds(0.2f);
 
-            if (Target.HP > 0 && CheckMonsterInRange())
+            if (Target != null && Target.HP > 0 && CheckMonsterInRange())
                 GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, Damage));
             EffectManager.Instance.CreateEffect(ATTACK_EFFECT_NAME, UnitPosition + ATTACK_EFFECT_POS, ATTACK_EFFECT_SCALE, ATTACK_EFFECT_ROTATE, 2);
             SoundManager.Instance.PlaySfx("Alice_Attack");
