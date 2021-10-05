@@ -22,8 +22,8 @@ namespace poorlord
     /// </summary>
     public abstract class PlayerUnit : Unit
     {
-        protected List<ImmediatelyBuff> immediatelyBuffList = new List<ImmediatelyBuff>();
-        protected List<ContinuousBuff> continuousBuffList = new List<ContinuousBuff>();
+        protected List<Buff> immediatelyBuffList = new List<Buff>();
+        protected List<Buff> continuousBuffList = new List<Buff>();
 
         protected PlayerUnitState currentState = PlayerUnitState.Idle;
 

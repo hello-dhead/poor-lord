@@ -6,10 +6,10 @@ namespace poorlord
 {
     public class Slime : MonsterUnit
     {
-        private readonly float SLIME_ATTACK_DELAY = 5;
-        private readonly float SLIME_SPEED = 0.5f;
+        private readonly float ATTACK_DELAY = 5;
+        private readonly float SPEED = 0.5f;
 
-        public sealed override void Init(int slimeHP, int slimeDamage,  List<Vector3Int> path) // 필요한 스탯 최대체력 체력 공격력 공격범위, 
+        public sealed override void Init(int HP, int damage,  List<Vector3Int> path) // 필요한 스탯 최대체력 체력 공격력 공격범위, 
         {
             if (UnitAnimator == null)
             {
@@ -29,11 +29,13 @@ namespace poorlord
             spriteRenderer.flipX = true;
             monsterTransform = gameObject.transform;
 
-            MaxHP = slimeHP;
-            HP = slimeHP;
-            Damage = slimeDamage;
-            AttackDelay = SLIME_ATTACK_DELAY;
-            speed = SLIME_SPEED;
+            DamageMultiplier = 1;
+            AdditionalDamage = 0;
+            MaxHP = HP;
+            this.HP = HP;
+            Damage = damage;
+            AttackDelay = ATTACK_DELAY;
+            speed = SPEED;
             CurrentAttackDelay = AttackDelay;
 
             foreach (var pos in path)
@@ -177,13 +179,13 @@ namespace poorlord
 
         public sealed override void Attack()
         {
-            if (Target.HP - Damage > 0)
+            if (Target.HP - CalculateDamage() > 0)
             {
-                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, Damage));
+                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
             }
             else
             {
-                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, Damage));
+                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
                 Target = null;
                 CurrentAttackDelay = AttackDelay;
                 currentState = MonsterUnitState.Walk;
@@ -196,8 +198,10 @@ namespace poorlord
 
             GameManager.Instance.MessageSystem.Publish(MonsterDeadEvent.Create(this, UnitPosition));
             UnitAnimator.SetBool("dead", true);
-
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.2f);
+            EffectManager.Instance.CreateEffect("DeathStandard", this.gameObject.transform.position + new Vector3(0, 0.1f, -0.1f), new Vector3(0.25f, 0.25f, 0.25f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            SoundManager.Instance.PlaySfx("Weird04", 0.1f);
+            yield return new WaitForSeconds(0.1f);
             float alpha = spriteRenderer.material.color.a;
             for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / 1)
             {

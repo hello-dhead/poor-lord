@@ -8,6 +8,6 @@ using UnityEngine;
 namespace poorlord
 {
     public abstract class ImmediatelyBuff : Buff
-    {
+    { 
     }
 }

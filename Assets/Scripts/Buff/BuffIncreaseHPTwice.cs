@@ -7,17 +7,18 @@ using UnityEngine;
 /// </summary>
 namespace poorlord
 {
-    public class BuffIncreaseDamageTwice : ImmediatelyBuff
+    public class BuffIncreasedHPTwice : ImmediatelyBuff
     {
         public override void Init(Unit target)
         {
-            BuffName = "Damage X 2";
-            target.AddDamageMultiplier(2);
+            BuffName = "HP X 2";
+            target.SetHP(target.HP + target.MaxHP);
+            target.SetMaxHP(target.MaxHP * 2);
         }
 
         public override Buff Copy()
         {
-            return new BuffIncreaseDamageTwice();
+            return new BuffIncreasedHPTwice();
         }
 
         public override void Dispose()

@@ -7,12 +7,33 @@ namespace poorlord
 {
     public sealed class Warrior_Alice : PlayerUnit
     {
-        private readonly int ALICE_MAX_HP = 1000;
-        private readonly int ALICE_DAMAGE = 100;
-        private readonly float ALICE_ATTACK_DELAY = 2;
+        private readonly int MAX_HP = 1000;
+        private readonly int DAMAGE = 100;
+        private readonly float ATTACK_DELAY = 2;
+
+        /// <summary>
+        /// 유닛명
+        /// </summary>
+        private readonly string UNIT_NAME = "Alice";
+
+        /// <summary>
+        /// 공격에 사용 할 이펙트
+        /// </summary>
         private readonly string ATTACK_EFFECT_NAME = "SlashYellow";
+
+        /// <summary>
+        /// 이펙트 위치
+        /// </summary>
         private readonly Vector3 ATTACK_EFFECT_POS = new Vector3(-0.5f, 0.2f, 0);
+
+        /// <summary>
+        /// 이펙트 스케일
+        /// </summary>
         private readonly Vector3 ATTACK_EFFECT_SCALE = new Vector3(0.3f, 0.3f, 0.3f);
+
+        /// <summary>
+        /// 이펙트 로테이션
+        /// </summary>
         private readonly Quaternion ATTACK_EFFECT_ROTATE = Quaternion.Euler(new Vector3(-90, 90, 0));
 
         public override void Init(Vector3Int pos, List<ImmediatelyBuff> immediBuff, List<ContinuousBuff> continueBuff) // 필요한 스탯 최대체력 체력 공격력 공격범위, 
@@ -27,20 +48,26 @@ namespace poorlord
                 UnitAnimator.Play("Warrior_Alice_Idle");
             }
             gameObject.transform.GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, 1);
+
             // 값 초기화
-            MaxHP = ALICE_MAX_HP;
-            HP = ALICE_MAX_HP;
-            Damage = ALICE_DAMAGE;
-            AttackDelay = ALICE_ATTACK_DELAY;
-
-            unitName = "Alice";
-
+            MaxHP = MAX_HP;
+            HP = MAX_HP;
+            Damage = DAMAGE;
+            AttackDelay = ATTACK_DELAY;
+            AdditionalDamage = 0;
+            DamageMultiplier = 1;
+            unitName = UNIT_NAME;
             CurrentAttackDelay = 0;
-            immediatelyBuffList = immediBuff;
-            continuousBuffList = continueBuff;
+
+            // 유닛 위치 초기화
             this.gameObject.transform.position = pos + new Vector3(0,0,-0.4f);
             UnitPosition = pos;
+
+            // 상태 초기화
             currentState = PlayerUnitState.Init;
+
+            // 애니메이션 초기화
+            ResetBlinkCount();
 
             // 업데이트 추가
             GameManager.Instance.AddUpdate(this);
@@ -57,11 +84,20 @@ namespace poorlord
             rangeTile.Add(pos + new Vector3Int(0, 0, 1));
             rangeTile.Add(pos + new Vector3Int(0, 0, -1));
 
-            // 즉시 적용되는 버프 적용
-            for (int i = 0; i < immediatelyBuffList.Count; i++)
-                immediatelyBuffList[i].Init(this);
-
-            ResetBlinkCount();
+            // 버프 적용
+            for (int i = 0; i < immediBuff.Count; i++)
+            {
+                Buff buff = immediBuff[i].Copy();
+                buff.Init(this);
+                immediatelyBuffList.Add(buff);
+            }
+            
+            for (int i = 0; i < continueBuff.Count; i++)
+            {
+                Buff buff = continueBuff[i].Copy();
+                buff.Init(this);
+                continuousBuffList.Add(buff);
+            }
 
             GameManager.Instance.MessageSystem.Publish(PlayerUnitSummonEvent.Create(pos, this));
         }
@@ -132,11 +168,6 @@ namespace poorlord
                 {
                     DamageEvent newDamageEvent = DamageEvent.Create(DamageEvent.Publisher, DamageEvent.Target, DamageEvent.Damage);
 
-                    for (int i = 0; i < continuousBuffList.Count; i++)
-                    {
-                        continuousBuffList[i].OnEvent(newDamageEvent);
-                    }
-
                     if(HP > newDamageEvent.Damage)
                     {
                         HP -= newDamageEvent.Damage;
@@ -150,13 +181,6 @@ namespace poorlord
             else if (e.GetType() == typeof(BattleStageEndEvent))
             {
                 Dispose(true);
-            }
-            else
-            {
-                for (int i = 0; i < continuousBuffList.Count; i++)
-                {
-                    continuousBuffList[i].OnEvent(e);
-                }
             }
             return false;
         }
@@ -185,7 +209,7 @@ namespace poorlord
             yield return new WaitForSeconds(0.2f);
 
             if (Target != null && Target.HP > 0 && CheckMonsterInRange())
-                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, Damage));
+                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
             EffectManager.Instance.CreateEffect(ATTACK_EFFECT_NAME, UnitPosition + ATTACK_EFFECT_POS, ATTACK_EFFECT_SCALE, ATTACK_EFFECT_ROTATE, 2);
             SoundManager.Instance.PlaySfx("Alice_Attack");
         }
@@ -203,6 +227,9 @@ namespace poorlord
             // 특성 dispose
             for (int i = 0; i < continuousBuffList.Count; i++)
                 continuousBuffList[i].Dispose();
+
+            for (int i = 0; i < immediatelyBuffList.Count; i++)
+                immediatelyBuffList[i].Dispose();
 
             // 변수 초기화
             continuousBuffList.Clear();

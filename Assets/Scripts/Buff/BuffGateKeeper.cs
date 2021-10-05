@@ -14,7 +14,7 @@ namespace poorlord
         {
             BuffName = "GateKeeper";
             Target = bufftarget;
-            GameManager.Instance.MessageSystem.Subscribe(typeof(TileEnterEvent), Target);
+            GameManager.Instance.MessageSystem.Subscribe(typeof(TileEnterEvent), this);
         }
 
         public override Buff Copy()
@@ -24,11 +24,11 @@ namespace poorlord
 
         public override void Dispose()
         {
-            GameManager.Instance.MessageSystem.Unsubscribe(typeof(TileEnterEvent), Target);
+            GameManager.Instance.MessageSystem.Unsubscribe(typeof(TileEnterEvent), this);
             Target = null;
         }
 
-        public override IEvent OnEvent(IEvent e)
+        public override bool OnEvent(IEvent e)
         {
             if (e.GetType() == typeof(TileEnterEvent))
             {
@@ -51,7 +51,7 @@ namespace poorlord
                     }
                 }
             }
-            return e;
+            return true;
         }
     }
 }
