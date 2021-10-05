@@ -147,6 +147,7 @@ namespace poorlord
         {
             yield return new WaitForSeconds(1f);
             Fade.Instance.FadeIn(1);
+            EffectManager.Instance.RemoveAllEffect();
             yield return new WaitForSeconds(1f);
 
             GameManager.Instance.RemoveUpdate(this);
@@ -201,7 +202,10 @@ namespace poorlord
 
             for (int i = 0; i < stageMonsterList.Count; i++)
             {
-                stageMonsterList[i].ChangePath(TileManager.Instance.GetPathFromPos(stageMonsterList[i].GetPathList()[0]));
+                // stageMonsterList[i].ChangePath(TileManager.Instance.GetPathFromPos(stageMonsterList[i].GetPathList()[0]));
+                List<Vector3Int> path = TileManager.Instance.GetPathFromPos(stageMonsterList[i].UnitPosition);
+                path.RemoveAt(0);
+                stageMonsterList[i].ChangePath(path);
             }
         }
     }
