@@ -88,9 +88,15 @@ namespace poorlord
             }
         }
 
+        // TODO: 사막, 얼음맵 출현하도록 수정 필요
         public void StartBattleStage()
         {
             TileManager.Instance.CreateTileMap((TileTheme)0, 10, 4);
+
+            Camera camera = Camera.main;
+            ParticleSystem dust = EffectManager.Instance.CreateEffect("ForestDust", camera.transform.position + new Vector3(0, -1.5f, 2), new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)));
+            dust.transform.SetParent(camera.transform);
+
             MessageSystem.Publish(BattleStageStartEvent.Create(stage));
             stage++;
         }
