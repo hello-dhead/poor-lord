@@ -11,15 +11,13 @@ namespace poorlord
     public class UnitCardData : CardData
     {
         private UnitID unit;
-        private List<ImmediatelyBuff> immediatelyBuff = new List<ImmediatelyBuff>();
-        private List<ContinuousBuff> continuousBuff = new List<ContinuousBuff>();
+        private List<Buff> buffList = new List<Buff>();
 
         // 생성자
-        public UnitCardData(int cost, string name, Sprite frame, Sprite image, List<ImmediatelyBuff> immdiBuff, List<ContinuousBuff> contiBuff, UnitID unit) : base(cost, name, frame, image)
+        public UnitCardData(int cost, string name, Sprite frame, Sprite image, List<Buff> buff, UnitID unit) : base(cost, name, frame, image)
         {
             this.unit = unit;
-            immediatelyBuff = immdiBuff;
-            continuousBuff = contiBuff;
+            buffList = buff;
         }
 
         // 유닛 소환
@@ -28,7 +26,7 @@ namespace poorlord
             if (TileManager.Instance.CheckBuildableUnit(pos.x, pos.z) && GameManager.Instance.BattleSystem.SpendGold(Cost))
             {
                 PlayerUnit platerUnit = (PlayerUnit)FieldObjectManager.Instance.CreateUnit(unit);
-                platerUnit.Init(pos, immediatelyBuff, continuousBuff);
+                platerUnit.Init(pos, buffList);
                 return true;
             }
             return false;
@@ -38,15 +36,11 @@ namespace poorlord
         public override List<String> GetCardStr()
         {
             List<String> cardString = new List<String>();
-            for (int i = 0; i < continuousBuff.Count; i++)
+            for (int i = 0; i < buffList.Count; i++)
             {
-                cardString.Add(continuousBuff[i].BuffName);
+                cardString.Add(buffList[i].BuffName);
             }
 
-            for (int i = 0; i < immediatelyBuff.Count; i++)
-            {
-                cardString.Add(immediatelyBuff[i].BuffName);
-            }
             return cardString;
         }
     }

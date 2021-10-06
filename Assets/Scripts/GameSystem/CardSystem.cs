@@ -126,7 +126,6 @@ namespace poorlord
         private Card CreateCard(CardData card)
         {
             Card new_card = PoolManager.Instance.GetOrCreateObjectPoolFromPath<Card>(CardPoolKey, "Prefabs/Card");
-            //cardCanvas
             new_card.transform.parent = cardCanvas;
 
             new_card.transform.localPosition = new Vector3(-((SORT_DISTANCE / 2) * (CurrentHand.Count)) + (SORT_DISTANCE* (CurrentHand.Count)), -450, 0);
@@ -168,7 +167,6 @@ namespace poorlord
         }
 
         // 덱을 복사한다.
-        // TODO : 일단은 레퍼런스 복사해도 문제가 없어 보이는데 나중에 문제되면 수정 필요
         private void CopyDeck()
         {
             CurrentStageDeck.Clear();
@@ -184,27 +182,27 @@ namespace poorlord
         {
             CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
             CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
-            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
-            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
-            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
-            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
 
-            CardDeckList.Add(new UnitCardData(3, "Alice", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Alice), new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), UnitID.Alice));
-            CardDeckList.Add(new UnitCardData(3, "Alice", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Alice), new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), UnitID.Alice));
+            CardDeckList.Add(new UnitCardData(3, "Alice", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Alice), new List<Buff>(), UnitID.Alice));
+            CardDeckList.Add(new UnitCardData(3, "Alice", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Alice), new List<Buff>(), UnitID.Alice));
         }
 
         // 유닛ID와 밸류를 기반으로 랜덤한 카드 생성
-        public void CreateCardData(CardValue value, UnitID unit)
+        public void CreateCardData(CardValue value, UnitID unit, List<Buff> buff = null)
         {
             int cost = GetUnitValue(value);
 
-            // TODO : 스킬셋 제대로 갖춰지면 랜덤한 버프 부여
+            if (buff == null)
+                buff = new List<Buff>();
 
-            CardDeckList.Add(new UnitCardData(cost, UnitID.GetName(unit.GetType(), unit), GetCardFrame(value), GetSprite(unit), 
-                new List<ImmediatelyBuff>(), new List<ContinuousBuff>(), (UnitID)UnityEngine.Random.Range(0, (int)UnitID.PlayerUnitMax)));
+            List <Buff> copyBuff = new List<Buff>();
+            for (int i = 0; i < buff.Count; i++)
+                copyBuff.Add(buff[i].Copy());
+
+            CardDeckList.Add(new UnitCardData(cost, UnitID.GetName(unit.GetType(), unit), GetCardFrame(value), GetSprite(unit), copyBuff, unit));
         }
 
-        // 유닛ID와 밸류를 기반으로 랜덤한 카드 생성
+        // 블럭ID와 밸류를 기반으로 랜덤한 카드 생성
         public void CreateCardData(CardValue value, BlockID block, string name)
         {
             int cost = GetUnitValue(value);

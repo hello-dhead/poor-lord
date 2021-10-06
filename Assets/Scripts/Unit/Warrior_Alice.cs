@@ -36,7 +36,7 @@ namespace poorlord
         /// </summary>
         private readonly Quaternion ATTACK_EFFECT_ROTATE = Quaternion.Euler(new Vector3(-90, 90, 0));
 
-        public override void Init(Vector3Int pos, List<ImmediatelyBuff> immediBuff, List<ContinuousBuff> continueBuff) // 필요한 스탯 최대체력 체력 공격력 공격범위, 
+        public override void Init(Vector3Int pos, List<Buff> buff)
         {
             if (UnitAnimator == null)
             {
@@ -85,18 +85,11 @@ namespace poorlord
             rangeTile.Add(pos + new Vector3Int(0, 0, -1));
 
             // 버프 적용
-            for (int i = 0; i < immediBuff.Count; i++)
+            for (int i = 0; i < buff.Count; i++)
             {
-                Buff buff = immediBuff[i].Copy();
-                buff.Init(this);
-                immediatelyBuffList.Add(buff);
-            }
-            
-            for (int i = 0; i < continueBuff.Count; i++)
-            {
-                Buff buff = continueBuff[i].Copy();
-                buff.Init(this);
-                continuousBuffList.Add(buff);
+                Buff buffCopy = buff[i].Copy();
+                buffCopy.Init(this);
+                buffList.Add(buffCopy);
             }
 
             GameManager.Instance.MessageSystem.Publish(PlayerUnitSummonEvent.Create(pos, this));
@@ -225,15 +218,12 @@ namespace poorlord
             GameManager.Instance.MessageSystem.Unsubscribe(typeof(BattleStageEndEvent), this);
 
             // 특성 dispose
-            for (int i = 0; i < continuousBuffList.Count; i++)
-                continuousBuffList[i].Dispose();
-
-            for (int i = 0; i < immediatelyBuffList.Count; i++)
-                immediatelyBuffList[i].Dispose();
+            for (int i = 0; i < buffList.Count; i++)
+                buffList[i].Dispose();
 
             // 변수 초기화
-            continuousBuffList.Clear();
-            immediatelyBuffList.Clear();
+            buffList.Clear();
+
             rangeTile.Clear();
             Target = null;
 

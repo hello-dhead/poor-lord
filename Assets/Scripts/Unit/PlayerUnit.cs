@@ -22,11 +22,10 @@ namespace poorlord
     /// </summary>
     public abstract class PlayerUnit : Unit
     {
-        protected List<Buff> immediatelyBuffList = new List<Buff>();
-        protected List<Buff> continuousBuffList = new List<Buff>();
+        protected List<Buff> buffList = new List<Buff>();
 
         protected PlayerUnitState currentState = PlayerUnitState.Idle;
 
-        public abstract void Init(Vector3Int pos, List<ImmediatelyBuff> immediBuff, List<ContinuousBuff> continueBuff);
+        public abstract void Init(Vector3Int pos, List<Buff> buff);
     }
 }

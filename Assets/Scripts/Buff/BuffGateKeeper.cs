@@ -10,9 +10,10 @@ namespace poorlord
     /// </summary>
     public class BuffGateKeeper : ContinuousBuff
     {
+        public override string BuffName { get { return "GateKeeper"; } protected set { } }
+
         public override void Init(Unit bufftarget)
         {
-            BuffName = "GateKeeper";
             Target = bufftarget;
             GameManager.Instance.MessageSystem.Subscribe(typeof(TileEnterEvent), this);
         }

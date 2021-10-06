@@ -25,6 +25,11 @@ namespace poorlord
         [SerializeField]
         private GameObject reward;
 
+        [SerializeField]
+        private List<Text> buffTextList;
+
+        private List<Buff> buffList = new List<Buff>();
+
         private CardValue value;
 
         private UnitID unit;
@@ -39,12 +44,29 @@ namespace poorlord
 
             coinText.text = GameManager.Instance.CardSystem.GetUnitValue(value).ToString();
             unitText.text = UnitID.GetName(unit.GetType(), unit);
+
+            for (int i = 0; i < buffTextList.Count; i++)
+                buffTextList[i].text = "";
+
+            AddBuff(value);
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            GameManager.Instance.CardSystem.CreateCardData(value, unit);
+            GameManager.Instance.CardSystem.CreateCardData(value, unit, buffList);
             reward.SetActive(false);
+        }
+
+        private void AddBuff(CardValue value)
+        {
+            int buffNum = ((int)value + 1);
+            buffList.Clear();
+            for (int i = 0; i < buffNum; i++)
+            {
+                Buff buff = BuffManager.Instance.GetRandomBuff();
+                buffTextList[i].text = buff.BuffName;
+                buffList.Add(buff);
+            }
         }
     }
 }

@@ -9,9 +9,10 @@ namespace poorlord
 {
     public class BuffAdditionalDamage : ImmediatelyBuff
     {
+        public override string BuffName { get { return "Damage ++"; } protected set { } }
+
         public override void Init(Unit target)
         {
-            BuffName = "Damage ++";
             target.AddAdditionalDamage(100);
         }
 

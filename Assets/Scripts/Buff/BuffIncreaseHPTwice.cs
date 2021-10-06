@@ -9,9 +9,10 @@ namespace poorlord
 {
     public class BuffIncreasedHPTwice : ImmediatelyBuff
     {
+        public override string BuffName { get { return "HP X 2"; } protected set { } }
+
         public override void Init(Unit target)
         {
-            BuffName = "HP X 2";
             target.SetHP(target.HP + target.MaxHP);
             target.SetMaxHP(target.MaxHP * 2);
         }

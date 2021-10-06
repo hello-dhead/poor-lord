@@ -59,11 +59,6 @@ namespace poorlord
 
         }
 
-        // 마우스 올리면 카드 정보 나오게 하기
-        public void ToDetail()
-        {
-        }
-
         // 카드 사용하기
         public void Spend(int x, int z)
         {
