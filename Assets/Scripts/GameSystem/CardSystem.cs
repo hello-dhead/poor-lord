@@ -210,6 +210,13 @@ namespace poorlord
             CardDeckList.Add(new MagicCardData(cost, name, GetCardFrame(value), GetSprite(block), block));
         }
 
+        // 첫 카드를 버림
+        public void DiscardFirstCard()
+        {
+            if(CurrentHand.Count > 0)
+                CurrentHand[0].Dispose();
+        }
+
         public void RemoveCard(Card card)
         {
             CurrentHand.Remove(card);
