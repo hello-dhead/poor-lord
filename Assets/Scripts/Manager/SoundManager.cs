@@ -34,7 +34,6 @@ namespace poorlord
 
             backGroundSound = gameObject.AddComponent<AudioSource>();
             backGroundSound.loop = true;
-            PlayBGM("Forest", 0.2f);
         }
 
         public void PlaySfx(string clip, float volume = 0.5f)

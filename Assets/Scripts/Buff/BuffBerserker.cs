@@ -8,9 +8,9 @@ namespace poorlord
     /// <summary>
     /// 몬스터가 자기가 있는 타일에 들어 올 때마다 체력을 10퍼센트 회복 maxHP를 넘을 수는 없음
     /// </summary>
-    public class BuffGateKeeper : ContinuousBuff
+    public class BuffBerserker : ContinuousBuff
     {
-        public override string BuffName { get { return "GateKeeper"; } protected set { } }
+        public override string BuffName { get { return "Berserker"; } protected set { } }
 
         public override void Init(Unit bufftarget)
         {
@@ -20,7 +20,7 @@ namespace poorlord
 
         public override Buff Copy()
         {
-            return new BuffGateKeeper();
+            return new BuffBerserker();
         }
 
         public override void Dispose()
@@ -36,17 +36,10 @@ namespace poorlord
                 TileEnterEvent tileEnter = e as TileEnterEvent;
 
                 PlayerUnit playertarget = Target as PlayerUnit;
+                Debug.Log(TileManager.Instance.GetContainPlayerUnit(tileEnter.EnterTilePos.x, tileEnter.EnterTilePos.z));
                 if (TileManager.Instance.GetContainPlayerUnit(tileEnter.EnterTilePos.x, tileEnter.EnterTilePos.z) == playertarget)
                 {
-                    int hp = playertarget.HP;
-                    if (hp + (int)(hp * 0.1) < playertarget.MaxHP)
-                    {
-                        playertarget.SetHP(hp + (int)(hp * 0.1));
-                    }
-                    else
-                    {
-                        playertarget.SetHP(playertarget.MaxHP);
-                    }
+                    Target.AddAdditionalDamage(10);
                 }
             }
             return true;

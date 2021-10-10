@@ -10,11 +10,8 @@ public class Loading : MonoBehaviour
   
     private void Start()
     {
-        
-
         loadingFill.fillAmount = 0f;
         Invoke("Delay", 0.2f);
-
     }
     void Delay()
     {

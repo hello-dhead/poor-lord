@@ -20,6 +20,7 @@ namespace poorlord
             buffList.Add(new BuffIncreaseDamageTwice());
             buffList.Add(new BuffIncreasedHPTwice());
             buffList.Add(new BuffGateKeeper());
+            buffList.Add(new BuffBerserker());
         }
 
         // 랜덤한 버프 리턴
