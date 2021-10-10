@@ -38,6 +38,7 @@ namespace poorlord
             speed = SPEED;
             CurrentAttackDelay = AttackDelay;
 
+            pathList.Clear();
             foreach (var pos in path)
                 pathList.Add(pos);
 

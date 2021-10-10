@@ -82,6 +82,7 @@ namespace poorlord
 
             GameManager.Instance.MessageSystem.Subscribe(typeof(MonsterDeadEvent), this);
 
+            monsterPathList.Clear();
             for (int i = 0; i < 4; i++)
                 monsterPathList.Add(TileManager.Instance.GetPathFromMonsterCastle());
         }

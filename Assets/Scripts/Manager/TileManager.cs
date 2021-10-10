@@ -94,7 +94,7 @@ namespace poorlord
                 {
                     int rand = Random.Range(0, currentTileMaterial.Count);
                     BasicTile tile = PoolManager.Instance.Create<BasicTile>(tileGroupData.BasicTilePath);
-                    tile.init(TileState.None, new Vector3Int(i, 0, j), currentTileMaterial[rand][0], currentTileMaterial[rand][1]);
+                    tile.Init(TileState.None, new Vector3Int(i, 0, j), currentTileMaterial[rand][0], currentTileMaterial[rand][1]);
                     tileList[i].Add(tile);
                 }
             }
@@ -210,11 +210,11 @@ namespace poorlord
                 DecorationTile bridge = PoolManager.Instance.Create<DecorationTile>("Bridge");
                 bridge.init(new Vector3Int(x, 0, z));
                 decoTileList.Add(new DecoTileListData("Bridge", bridge));
-                tileList[x][z].init(TileState.Bridge, new Vector3(x, (float)-0.5, z), currentWaterMaterial[0], currentWaterMaterial[1], false);
+                tileList[x][z].Init(TileState.Bridge, new Vector3(x, (float)-0.5, z), currentWaterMaterial[0], currentWaterMaterial[1], false);
             }
             else
             {
-                tileList[x][z].init(TileState.Water, new Vector3(x, (float)-0.5, z), currentWaterMaterial[0], currentWaterMaterial[1], false);
+                tileList[x][z].Init(TileState.Water, new Vector3(x, (float)-0.5, z), currentWaterMaterial[0], currentWaterMaterial[1], false);
             }
         }
 
@@ -374,6 +374,12 @@ namespace poorlord
         public void ChangeState(Vector3Int pos, TileState state)
         {
             tileList[pos.x][pos.z].SetState(state);
+        }
+
+        // 타일 리스트 길이 리턴
+        public int GetTileListCount()
+        {
+            return tileList.Count;
         }
     }
 
