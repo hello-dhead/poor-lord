@@ -17,13 +17,24 @@ namespace poorlord
         [SerializeField]
         private GameObject mainCamera;
 
+        [SerializeField]
+        private Sprite normalUI;
+
+        [SerializeField]
+        private Sprite pressUI;
+
+        [SerializeField]
+        private Image button;
+
         public void OnPointerDown(PointerEventData eventData)
         {
+            button.sprite = pressUI;
             GameManager.Instance.AddUpdate(this);
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            button.sprite = normalUI;
             GameManager.Instance.RemoveUpdate(this);
         }
 
