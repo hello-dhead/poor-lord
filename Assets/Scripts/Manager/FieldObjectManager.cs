@@ -16,7 +16,15 @@ namespace poorlord
         // 플레이어 유닛
         PlayerUnitMax,
         // 슬라임
-        Slime
+        Slime,
+        // 박쥐
+        Bat,
+        // 버섯
+        Mushroom,
+        // 해골
+        Skeleton,
+        // 고릴라
+        Kong
     }
 
     public enum BlockID
@@ -64,6 +72,14 @@ namespace poorlord
                     return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Warrior_Alice>("Prefabs/Warrior_Alice");
                 case UnitID.Slime:
                     return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Slime>("Prefabs/Monster_Slime");
+                case UnitID.Bat:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Bat>("Prefabs/Monster_Bat");
+                case UnitID.Mushroom:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Mushroom>("Prefabs/Monster_Mushroom");
+                case UnitID.Skeleton:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Skeleton>("Prefabs/Monster_Skeleton");
+                case UnitID.Kong:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Kong>("Prefabs/Monster_Kong");
                 default:
                     return null;
             }
@@ -87,6 +103,18 @@ namespace poorlord
                     return true;
                 case UnitID.Slime:
                     PoolManager.Instance.Release<Slime>("Prefabs/Monster_Slime", (Slime)unit);
+                    return true;
+                case UnitID.Bat:
+                    PoolManager.Instance.Release<Bat>("Prefabs/Monster_Bat", (Bat)unit);
+                    return true;
+                case UnitID.Mushroom:
+                    PoolManager.Instance.Release<Mushroom>("Prefabs/Monster_Mushroom", (Mushroom)unit);
+                    return true;
+                case UnitID.Skeleton:
+                    PoolManager.Instance.Release<Skeleton>("Prefabs/Monster_Skeleton", (Skeleton)unit);
+                    return true;
+                case UnitID.Kong:
+                    PoolManager.Instance.Release<Kong>("Prefabs/Monster_Kong", (Kong)unit);
                     return true;
                 default:
                     return false;
