@@ -21,6 +21,8 @@ namespace poorlord
                 UnitAnimator.SetBool("dead", false);
             }
 
+            gameObject.transform.GetChild(0).transform.position = new Vector3(-0.1f + Random.Range(-0.1f, 0.1f), 0.1f, -0.3f + Random.Range(-0.1f, 0.1f));
+
             unitName = "Skeleton";
 
             spriteRenderer = gameObject.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>();
@@ -82,6 +84,14 @@ namespace poorlord
                     SetPath();
                     break;
                 case MonsterUnitState.Attack:
+                    if (Target.HP <= 0)
+                    {
+                        Target = null;
+                        CurrentAttackDelay = AttackDelay;
+                        currentState = MonsterUnitState.Walk;
+                        break;
+                    }
+
                     if (CurrentAttackDelay > AttackDelay)
                     {
                         CurrentAttackDelay = 0;
@@ -180,21 +190,7 @@ namespace poorlord
 
         public sealed override void Attack()
         {
-            if (Target.HP - CalculateDamage() > 0)
-            {
-                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
-            }
-            else
-            {
-                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
-                Target = null;
-                CurrentAttackDelay = AttackDelay;
-                currentState = MonsterUnitState.Walk;
-            }
-
-            Vector3 effect_pos = this.gameObject.transform.position + ((Target.transform.position - this.gameObject.transform.position).normalized*0.3f);
-            effect_pos.y = 0.2f;
-            EffectManager.Instance.CreateEffect("PickupExplosionBlue", effect_pos, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            StartCoroutine("SkeletonAttack");
         }
 
         public sealed override IEnumerator Dead()
@@ -229,6 +225,20 @@ namespace poorlord
                 }
             }
             return false;
+        }
+
+        private IEnumerator SkeletonAttack()
+        {
+            UnitAnimator.Play("Skeleton_Attack");
+
+            yield return new WaitForSeconds(0.2f);
+
+            if (Target.HP > 0)
+            {
+                SoundManager.Instance.PlaySfx("SkeletonHit", 0.2f);
+                EffectManager.Instance.CreateEffect("SlashRed", gameObject.transform.position + new Vector3(0.5f, 0.5f, -0.2f), new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(90, 90, 0)), 2);
+                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
+            }
         }
     }
 }
