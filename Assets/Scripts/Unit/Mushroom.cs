@@ -21,6 +21,8 @@ namespace poorlord
                 UnitAnimator.SetBool("dead", false);
             }
 
+            gameObject.transform.GetChild(0).transform.position = new Vector3(0 + Random.Range(-0.1f, 0.1f), 0.1f, -0.3f + Random.Range(-0.1f, 0.1f));
+
             unitName = "Mushroom";
 
             spriteRenderer = gameObject.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>();
@@ -51,7 +53,7 @@ namespace poorlord
             GameManager.Instance.MessageSystem.Subscribe(typeof(PlayerUnitSummonEvent), this);
             GameManager.Instance.MessageSystem.Subscribe(typeof(DamageEvent), this);
 
-            rangeTile.Add(new Vector3Int(0,0,0));
+            rangeTile.Add(new Vector3Int(0, 0, 0));
         }
 
         public sealed override void Dispose(bool isReleaseImmediately)
@@ -82,6 +84,14 @@ namespace poorlord
                     SetPath();
                     break;
                 case MonsterUnitState.Attack:
+                    if (Target.HP <= 0)
+                    {
+                        Target = null;
+                        CurrentAttackDelay = AttackDelay;
+                        currentState = MonsterUnitState.Walk;
+                        break;
+                    }
+
                     if (CurrentAttackDelay > AttackDelay)
                     {
                         CurrentAttackDelay = 0;
@@ -180,21 +190,23 @@ namespace poorlord
 
         public sealed override void Attack()
         {
-            if (Target.HP - CalculateDamage() > 0)
-            {
-                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
-            }
-            else
-            {
-                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
-                Target = null;
-                CurrentAttackDelay = AttackDelay;
-                currentState = MonsterUnitState.Walk;
-            }
+            UnitAnimator.Play("Mushroom_Attack");
 
-            Vector3 effect_pos = this.gameObject.transform.position + ((Target.transform.position - this.gameObject.transform.position).normalized*0.3f);
-            effect_pos.y = 0.2f;
-            EffectManager.Instance.CreateEffect("PickupExplosionBlue", effect_pos, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            Unit target;
+            for (int i = -1; i < 1; i++)
+            {
+                target =  TileManager.Instance.GetContainPlayerUnit(UnitPosition.x + i, UnitPosition.z - 1);
+                if (target != null)
+                    SporeAttack(target);
+
+                target = TileManager.Instance.GetContainPlayerUnit(UnitPosition.x + i, UnitPosition.z);
+                if (target != null)
+                    SporeAttack(target);
+
+                target = TileManager.Instance.GetContainPlayerUnit(UnitPosition.x + i, UnitPosition.z + 1);
+                if (target != null)
+                    SporeAttack(target);
+            }
         }
 
         public sealed override IEnumerator Dead()
@@ -229,6 +241,13 @@ namespace poorlord
                 }
             }
             return false;
+        }
+
+        private void SporeAttack(Unit target)
+        {
+            Spore spore = PoolManager.Instance.GetOrCreateObjectPoolFromPath<Spore>("Prefabs/Spore");
+            spore.ExecuteSkill(this, target, CalculateDamage());
+            return;
         }
     }
 }
