@@ -6,7 +6,7 @@ namespace poorlord
 {
     public class Kong : MonsterUnit
     {
-        private readonly float ATTACK_DELAY = 5;
+        private readonly float ATTACK_DELAY = 3;
         private readonly float SPEED = 0.5f;
 
         public sealed override void Init(int HP, int damage,  List<Vector3Int> path) // 필요한 스탯 최대체력 체력 공격력 공격범위, 
@@ -20,6 +20,8 @@ namespace poorlord
                 UnitAnimator.Rebind();
                 UnitAnimator.SetBool("dead", false);
             }
+
+            gameObject.transform.GetChild(0).transform.position = new Vector3(0 + Random.Range(-0.1f, 0.1f), 0.1f, -0.3f + Random.Range(-0.1f, 0.1f));
 
             unitName = "Kong";
 
@@ -51,7 +53,12 @@ namespace poorlord
             GameManager.Instance.MessageSystem.Subscribe(typeof(PlayerUnitSummonEvent), this);
             GameManager.Instance.MessageSystem.Subscribe(typeof(DamageEvent), this);
 
-            rangeTile.Add(new Vector3Int(0,0,0));
+            for (int i = -2; i < 3; i++)
+            {
+                rangeTile.Add(new Vector3Int(i, 0, -1));
+                rangeTile.Add(new Vector3Int(i, 0, 0));
+                rangeTile.Add(new Vector3Int(i, 0, 1));
+            }
         }
 
         public sealed override void Dispose(bool isReleaseImmediately)
@@ -82,6 +89,14 @@ namespace poorlord
                     SetPath();
                     break;
                 case MonsterUnitState.Attack:
+                    if (Target.HP <= 0)
+                    {
+                        Target = null;
+                        CurrentAttackDelay = AttackDelay;
+                        currentState = MonsterUnitState.Walk;
+                        break;
+                    }
+
                     if (CurrentAttackDelay > AttackDelay)
                     {
                         CurrentAttackDelay = 0;
@@ -180,21 +195,8 @@ namespace poorlord
 
         public sealed override void Attack()
         {
-            if (Target.HP - CalculateDamage() > 0)
-            {
-                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
-            }
-            else
-            {
-                GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
-                Target = null;
-                CurrentAttackDelay = AttackDelay;
-                currentState = MonsterUnitState.Walk;
-            }
-
-            Vector3 effect_pos = this.gameObject.transform.position + ((Target.transform.position - this.gameObject.transform.position).normalized*0.3f);
-            effect_pos.y = 0.2f;
-            EffectManager.Instance.CreateEffect("PickupExplosionBlue", effect_pos, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            UnitAnimator.Play("Kong_Attack");
+            RockAttack();
         }
 
         public sealed override IEnumerator Dead()
@@ -229,6 +231,13 @@ namespace poorlord
                 }
             }
             return false;
+        }
+
+        private void RockAttack()
+        {
+            Rock rock = PoolManager.Instance.GetOrCreateObjectPoolFromPath<Rock>("Prefabs/Rock");
+            rock.ExecuteSkill(this, Target, CalculateDamage());
+            return;
         }
     }
 }
