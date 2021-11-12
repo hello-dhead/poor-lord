@@ -167,6 +167,7 @@ namespace poorlord
                     }
                     else
                     {
+                        HP = 0;
                         currentState = PlayerUnitState.Dead;
                     }
                 }

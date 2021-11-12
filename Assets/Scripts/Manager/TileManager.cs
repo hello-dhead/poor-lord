@@ -313,6 +313,8 @@ namespace poorlord
         // 타일에 존재하는 플레이어 유닛 받아오기
         public PlayerUnit GetContainPlayerUnit(int x, int z)
         {
+            if (tileList.Count <= x || tileList[0].Count <= z || x < 0 || z < 0)
+                return null;
             return tileList[x][z].GetContainPlayerUnit();
         }
 

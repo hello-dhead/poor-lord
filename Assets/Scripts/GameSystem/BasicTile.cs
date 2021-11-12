@@ -86,7 +86,7 @@ namespace poorlord
                 {
                     containMonsterUnitList.Add((MonsterUnit)enterEvent.EnterUnit);
 
-                    Debug.Log(tileTransform.position + " 몬스터 IN " + containMonsterUnitList.Count);
+                    //Debug.Log(tileTransform.position + " 몬스터 IN " + containMonsterUnitList.Count);
                 }
                 return true;
             }
@@ -97,7 +97,7 @@ namespace poorlord
                 {
                     containMonsterUnitList.Remove((MonsterUnit)leaveEvent.LeaveUnit);
 
-                    Debug.Log(tileTransform.position + " 몬스터 OUT " + containMonsterUnitList.Count);
+                    //Debug.Log(tileTransform.position + " 몬스터 OUT " + containMonsterUnitList.Count);
                 }
                 return true;
             }
@@ -107,7 +107,7 @@ namespace poorlord
                 if (deadEvent.DeadPos.x == tileTransform.position.x && deadEvent.DeadPos.z == tileTransform.position.z)
                 {
                     containMonsterUnitList.Remove(deadEvent.DeadUnit);
-                    Debug.Log(tileTransform.position + " 몬스터 Dead " + containMonsterUnitList.Count);
+                    //Debug.Log(tileTransform.position + " 몬스터 Dead " + containMonsterUnitList.Count);
                 }            
                 return true;
             }
@@ -117,7 +117,7 @@ namespace poorlord
                 if (summonEvent.SummonTilePos.x == tileTransform.position.x && summonEvent.SummonTilePos.z == tileTransform.position.z)
                 {
                     containPlayerUnit = summonEvent.SummonUnit;
-                    Debug.Log(tileTransform.position + " 유닛 Summon " + containPlayerUnit);
+                    //Debug.Log(tileTransform.position + " 유닛 Summon " + containPlayerUnit);
                 }
                 return true;
             }
@@ -127,7 +127,7 @@ namespace poorlord
                 if (deadEvent.DeadPos.x == tileTransform.position.x && deadEvent.DeadPos.z == tileTransform.position.z)
                 {
                     containPlayerUnit = null;
-                    Debug.Log(tileTransform.position + " 유닛 Dead " + containPlayerUnit);
+                    //Debug.Log(tileTransform.position + " 유닛 Dead " + containPlayerUnit);
                 }
                 return true;
             }
