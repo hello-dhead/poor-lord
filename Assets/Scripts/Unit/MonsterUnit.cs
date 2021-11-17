@@ -34,46 +34,7 @@ namespace poorlord
 
         public abstract void Init( int hp, int damage, List<Vector3Int> path);
 
-        public sealed override void Dispose(bool isReleaseImmediately)
-        {
-            pathList = null;
-
-            // 업데이트에서 제거
-            GameManager.Instance.RemoveUpdate(this);
-
-            GameManager.Instance.MessageSystem.Unsubscribe(typeof(PlayerUnitSummonEvent), this);
-            GameManager.Instance.MessageSystem.Unsubscribe(typeof(DamageEvent), this);
-            rangeTile.Clear();
-
-            Target = null;
-
-            if (isReleaseImmediately == true)
-                FieldObjectManager.Instance.ReleaseUnit(unitName, this);
-        }
-
-        protected void SetPath()
-        {
-            // 다음 노드로 이동
-            if (pathList.Count > 1)
-            {
-                pathList.RemoveAt(0);
-                direction = ((Vector3)pathList[0] - UnitPosition).normalized;
-                if (UnitPosition.x <= pathList[0].x)
-                {
-                    spriteRenderer.flipX = true;
-                }
-                else
-                {
-                    spriteRenderer.flipX = false;
-                }
-                currentState = MonsterUnitState.Walk;
-            }
-            else
-            {
-                Dispose(true);
-            }
-        }
-
+        // 구독한 이벤트 처리
         public sealed override bool OnEvent(IEvent e)
         {
             if (e.GetType() == typeof(DamageEvent))
@@ -147,6 +108,46 @@ namespace poorlord
             }
             UnitAnimator.SetBool("dead", false);
             FieldObjectManager.Instance.ReleaseUnit(unitName, this);
+        }
+
+        public sealed override void Dispose(bool isReleaseImmediately)
+        {
+            pathList = null;
+
+            // 업데이트에서 제거
+            GameManager.Instance.RemoveUpdate(this);
+
+            GameManager.Instance.MessageSystem.Unsubscribe(typeof(PlayerUnitSummonEvent), this);
+            GameManager.Instance.MessageSystem.Unsubscribe(typeof(DamageEvent), this);
+            rangeTile.Clear();
+
+            Target = null;
+
+            if (isReleaseImmediately == true)
+                FieldObjectManager.Instance.ReleaseUnit(unitName, this);
+        }
+
+        protected void SetPath()
+        {
+            // 다음 노드로 이동
+            if (pathList.Count > 1)
+            {
+                pathList.RemoveAt(0);
+                direction = ((Vector3)pathList[0] - UnitPosition).normalized;
+                if (UnitPosition.x <= pathList[0].x)
+                {
+                    spriteRenderer.flipX = true;
+                }
+                else
+                {
+                    spriteRenderer.flipX = false;
+                }
+                currentState = MonsterUnitState.Walk;
+            }
+            else
+            {
+                Dispose(true);
+            }
         }
 
         protected bool CheckPlayerUnit()

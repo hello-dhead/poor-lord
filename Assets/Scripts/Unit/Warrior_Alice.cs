@@ -45,7 +45,7 @@ namespace poorlord
             else
             {
                 UnitAnimator.Rebind();
-                UnitAnimator.Play("Warrior_Alice_Idle");
+                UnitAnimator.Play("Idle");
             }
             gameObject.transform.GetComponent<SpriteRenderer>().material.color = new Color(1, 1, 1, 1);
 

@@ -181,9 +181,10 @@ namespace poorlord
         private void CreateBasicDeck()
         {
             CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
-            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
+            //CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
 
-            CardDeckList.Add(new UnitCardData(3, "Alice", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Alice), new List<Buff>(), UnitID.Alice));
+            CardDeckList.Add(new UnitCardData(3, "Shiori", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Shiori), new List<Buff>(), UnitID.Shiori));
+            CardDeckList.Add(new UnitCardData(3, "Shiori", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Shiori), new List<Buff>(), UnitID.Shiori));
             CardDeckList.Add(new UnitCardData(3, "Alice", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Alice), new List<Buff>(), UnitID.Alice));
         }
 

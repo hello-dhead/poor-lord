@@ -13,6 +13,8 @@ namespace poorlord
     {
         // 전사1
         Alice,
+        // 궁수1
+        Shiori,
         // 플레이어 유닛
         PlayerUnitMax,
         // 슬라임
@@ -70,6 +72,8 @@ namespace poorlord
             {
                 case UnitID.Alice:
                     return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Warrior_Alice>("Prefabs/Warrior_Alice");
+                case UnitID.Shiori:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Archer_Shiori>("Prefabs/Archer_Shiori");
                 case UnitID.Slime:
                     return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Slime>("Prefabs/Monster_Slime");
                 case UnitID.Bat:
@@ -100,6 +104,9 @@ namespace poorlord
             {
                 case UnitID.Alice:
                     PoolManager.Instance.Release<Warrior_Alice>("Prefabs/Warrior_Alice", (Warrior_Alice)unit);
+                    return true;
+                case UnitID.Shiori:
+                    PoolManager.Instance.Release<Archer_Shiori>("Prefabs/Archer_Shiori", (Archer_Shiori)unit);
                     return true;
                 case UnitID.Slime:
                     PoolManager.Instance.Release<Slime>("Prefabs/Monster_Slime", (Slime)unit);
