@@ -69,9 +69,12 @@ namespace poorlord
                 case MonsterUnitState.Attack:
                     if (Target.HP <= 0)
                     {
-                        Target = null;
-                        CurrentAttackDelay = AttackDelay;
-                        currentState = MonsterUnitState.Walk;
+                        if (CheckPlayerUnit() == false)
+                        {
+                            Target = null;
+                            CurrentAttackDelay = AttackDelay;
+                            currentState = MonsterUnitState.Walk;
+                        }
                         break;
                     }
 

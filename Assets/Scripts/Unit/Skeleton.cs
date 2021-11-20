@@ -69,9 +69,12 @@ namespace poorlord
                 case MonsterUnitState.Attack:
                     if (Target.HP <= 0)
                     {
-                        Target = null;
-                        CurrentAttackDelay = AttackDelay;
-                        currentState = MonsterUnitState.Walk;
+                        if (CheckPlayerUnit() == false)
+                        {
+                            Target = null;
+                            CurrentAttackDelay = AttackDelay;
+                            currentState = MonsterUnitState.Walk;
+                        }
                         break;
                     }
 
@@ -104,7 +107,7 @@ namespace poorlord
 
             yield return new WaitForSeconds(0.2f);
 
-            if (Target.HP > 0)
+            if (Target.HP > 0 && HP > 0)
             {
                 SoundManager.Instance.PlaySfx("SkeletonHit", 0.2f);
                 EffectManager.Instance.CreateEffect("SlashRed", gameObject.transform.position + new Vector3(0.5f, 0.5f, -0.2f), new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(90, 90, 0)), 2);

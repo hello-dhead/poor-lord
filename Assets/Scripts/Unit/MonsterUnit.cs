@@ -97,7 +97,7 @@ namespace poorlord
             UnitAnimator.SetBool("dead", true);
             yield return new WaitForSeconds(0.2f);
             EffectManager.Instance.CreateEffect("DeathStandard", this.gameObject.transform.position + new Vector3(0, 0.1f, -0.1f), new Vector3(0.25f, 0.25f, 0.25f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
-            SoundManager.Instance.PlaySfx("Weird04", 0.1f);
+            SoundManager.Instance.PlaySfx("Weird0" + Random.Range(1, 5), 0.1f);
             yield return new WaitForSeconds(0.1f);
             float alpha = spriteRenderer.material.color.a;
             for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / 1)
