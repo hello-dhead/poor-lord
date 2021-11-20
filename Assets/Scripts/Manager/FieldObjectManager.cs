@@ -13,8 +13,22 @@ namespace poorlord
     {
         // 전사1
         Alice,
+        // 전사2
+        Fuyuko,
+        // 전사3
+        Kaho,
         // 궁수1
         Shiori,
+        // 궁수2
+        Ranger,
+        // 궁수3
+        Serika,
+        // 법사1
+        Yuni,
+        // 법사2
+        Nian,
+        // 법사3
+        Asahi,
         // 플레이어 유닛
         PlayerUnitMax,
         // 슬라임
@@ -72,8 +86,22 @@ namespace poorlord
             {
                 case UnitID.Alice:
                     return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Warrior_Alice>("Prefabs/Warrior_Alice");
+                case UnitID.Fuyuko:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Warrior_Fuyuko>("Prefabs/Warrior_Fuyuko");
+                case UnitID.Kaho:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Warrior_Kaho>("Prefabs/Warrior_Kaho");
                 case UnitID.Shiori:
                     return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Archer_Shiori>("Prefabs/Archer_Shiori");
+                case UnitID.Ranger:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Archer_Ranger>("Prefabs/Archer_Ranger");
+                case UnitID.Serika:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Archer_Serika>("Prefabs/Archer_Serika");
+                case UnitID.Yuni:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Caster_Yuni>("Prefabs/Caster_Yuni");
+                case UnitID.Nian:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Caster_Nian>("Prefabs/Caster_Nian");
+                case UnitID.Asahi:
+                    return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Caster_Asahi>("Prefabs/Caster_Asahi");
                 case UnitID.Slime:
                     return PoolManager.Instance.GetOrCreateObjectPoolFromPath<Slime>("Prefabs/Monster_Slime");
                 case UnitID.Bat:
@@ -105,8 +133,29 @@ namespace poorlord
                 case UnitID.Alice:
                     PoolManager.Instance.Release<Warrior_Alice>("Prefabs/Warrior_Alice", (Warrior_Alice)unit);
                     return true;
+                case UnitID.Fuyuko:
+                    PoolManager.Instance.Release<Warrior_Fuyuko>("Prefabs/Warrior_Fuyuko", (Warrior_Fuyuko)unit);
+                    return true;
+                case UnitID.Kaho:
+                    PoolManager.Instance.Release<Warrior_Kaho>("Prefabs/Warrior_Kaho", (Warrior_Kaho)unit);
+                    return true;
                 case UnitID.Shiori:
                     PoolManager.Instance.Release<Archer_Shiori>("Prefabs/Archer_Shiori", (Archer_Shiori)unit);
+                    return true;
+                case UnitID.Ranger:
+                    PoolManager.Instance.Release<Archer_Ranger>("Prefabs/Archer_Ranger", (Archer_Ranger)unit);
+                    return true;
+                case UnitID.Serika:
+                    PoolManager.Instance.Release<Archer_Serika>("Prefabs/Archer_Serika", (Archer_Serika)unit);
+                    return true;
+                case UnitID.Yuni:
+                    PoolManager.Instance.Release<Caster_Yuni>("Prefabs/Caster_Yuni", (Caster_Yuni)unit);
+                    return true;
+                case UnitID.Nian:
+                    PoolManager.Instance.Release<Caster_Nian>("Prefabs/Caster_Nian", (Caster_Nian)unit);
+                    return true;
+                case UnitID.Asahi:
+                    PoolManager.Instance.Release<Caster_Asahi>("Prefabs/Caster_Asahi", (Caster_Asahi)unit);
                     return true;
                 case UnitID.Slime:
                     PoolManager.Instance.Release<Slime>("Prefabs/Monster_Slime", (Slime)unit);
