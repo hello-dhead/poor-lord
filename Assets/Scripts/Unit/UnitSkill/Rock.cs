@@ -40,7 +40,7 @@ namespace poorlord
             {
                 SoundManager.Instance.PlaySfx("RockHit");
                 GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(caster, target, damage));
-                EffectManager.Instance.CreateEffect("SpikyExplosionYellow", this.gameObject.transform.position, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
+                GameManager.Instance.EffectSystem.CreateEffect("SpikyExplosionYellow", this.gameObject.transform.position, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
             }
 
             PoolManager.Instance.Release<Rock>("Prefabs/Rock", this);

@@ -6,15 +6,20 @@ using Assets.Scripts.Commons;
 namespace poorlord
 {
     /// <summary>
-    /// EffectManager의 역할 : 게임 내 모든 이펙트 관리
+    /// EffectSystem의 역할 : 게임 내 모든 이펙트 관리
     /// </summary>
-    public class EffectManager : Singleton<EffectManager>, IUpdatable
+    public class EffectSystem : IUpdatable
     {
         // 실행 중인 이펙트 리스트
         private List<Effect> effectList = new List<Effect>();
 
         // 이펙트 위치
         private readonly string EFFECT_PATH = "Effects/";
+
+        public EffectSystem()
+        {
+            GameManager.Instance.AddUpdate(this);
+        }
 
         public void UpdateFrame(float dt)
         {

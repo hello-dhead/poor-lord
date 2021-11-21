@@ -41,7 +41,7 @@ namespace poorlord
             {
                 SoundManager.Instance.PlaySfx("SporeHit", 0.2f);
                 GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(caster, target, damage));
-                EffectManager.Instance.CreateEffect("PickupExplosionPurple", this.gameObject.transform.position, new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
+                GameManager.Instance.EffectSystem.CreateEffect("PickupExplosionPurple", this.gameObject.transform.position, new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
             }
 
             PoolManager.Instance.Release<Spore>("Prefabs/Spore", this);

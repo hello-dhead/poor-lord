@@ -74,14 +74,14 @@ namespace poorlord
             if (Target != null && Target.HP > 0 && CheckMonsterInRange() && HP > 0)
             {
                 GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
-                EffectManager.Instance.CreateEffect(ATTACK_EFFECT_NAME, Target.transform.position + new Vector3(-0.5f, 0.2f, 0.2f), ATTACK_EFFECT_SCALE, ATTACK_EFFECT_ROTATE, 2);
+                GameManager.Instance.EffectSystem.CreateEffect(ATTACK_EFFECT_NAME, Target.transform.position + new Vector3(-0.5f, 0.2f, 0.2f), ATTACK_EFFECT_SCALE, ATTACK_EFFECT_ROTATE, 2);
                 SoundManager.Instance.PlaySfx("Fuyuko_Attack", 0.7f);
 
                 yield return new WaitForSeconds(0.1f);
 
                 if (Target != null && Target.HP > 0 && CheckMonsterInRange() && HP > 0)
                     GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
-                EffectManager.Instance.CreateEffect(ATTACK_EFFECT_NAME, Target.transform.position + new Vector3(0.5f, 0.2f, -0.2f), ATTACK_EFFECT_SCALE, ATTACK_EFFECT_ROTATE, 2);
+                GameManager.Instance.EffectSystem.CreateEffect(ATTACK_EFFECT_NAME, Target.transform.position + new Vector3(0.5f, 0.2f, -0.2f), ATTACK_EFFECT_SCALE, ATTACK_EFFECT_ROTATE, 2);
             }
         }
     }

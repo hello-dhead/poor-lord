@@ -14,7 +14,7 @@ namespace poorlord
 
         private IEnumerator Arrow_Attack(Unit caster, Unit target, int damage)
         {
-            ParticleSystem effect = EffectManager.Instance.CreateEffect("ShadowMissile", caster.gameObject.transform.transform.position + new Vector3(-0.3f, 0.5f, 0.2f)
+            ParticleSystem effect = GameManager.Instance.EffectSystem.CreateEffect("ShadowMissile", caster.gameObject.transform.transform.position + new Vector3(-0.3f, 0.5f, 0.2f)
                 , new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(0, 0, 0)));
 
             Vector3 startPos = effect.gameObject.transform.position;
@@ -39,9 +39,9 @@ namespace poorlord
             {
                 SoundManager.Instance.PlaySfx("StormExplosion", 0.3f);
                 GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(caster, target, damage));
-                EffectManager.Instance.CreateEffect("ShadowExplosion", effect.gameObject.transform.position, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
+                GameManager.Instance.EffectSystem.CreateEffect("ShadowExplosion", effect.gameObject.transform.position, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
             }
-            EffectManager.Instance.ReleaseEffect("ShadowMissile", effect);
+            GameManager.Instance.EffectSystem.ReleaseEffect("ShadowMissile", effect);
             PoolManager.Instance.Release<Serika_Arrow>("Prefabs/Serika_Arrow", this);
         }
     }

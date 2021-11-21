@@ -180,12 +180,17 @@ namespace poorlord
         // 기본덱 제작
         private void CreateBasicDeck()
         {
-            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
+            //CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
             //CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
 
-            CardDeckList.Add(new UnitCardData(3, "Shiori", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Shiori), new List<Buff>(), UnitID.Shiori));
-            CardDeckList.Add(new UnitCardData(3, "Shiori", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Shiori), new List<Buff>(), UnitID.Shiori));
-            CardDeckList.Add(new UnitCardData(3, "Alice", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Alice), new List<Buff>(), UnitID.Alice));
+            //CardDeckList.Add(new UnitCardData(3, "Shiori", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Shiori), new List<Buff>(), UnitID.Shiori));
+            CardDeckList.Add(new UnitCardData(3, "Serika", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Serika), new List<Buff>(), UnitID.Serika));
+            //CardDeckList.Add(new UnitCardData(3, "Ranger", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Ranger), new List<Buff>(), UnitID.Ranger));
+            //CardDeckList.Add(new UnitCardData(3, "Fuyuko", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Fuyuko), new List<Buff>(), UnitID.Fuyuko));
+            CardDeckList.Add(new UnitCardData(3, "Kaho", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Kaho), new List<Buff>(), UnitID.Kaho));
+            CardDeckList.Add(new UnitCardData(3, "Yuni", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Yuni), new List<Buff>(), UnitID.Yuni));
+            CardDeckList.Add(new UnitCardData(3, "Nian", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Nian), new List<Buff>(), UnitID.Nian));
+            CardDeckList.Add(new UnitCardData(3, "Asahi", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Asahi), new List<Buff>(), UnitID.Asahi));
         }
 
         // 유닛ID와 밸류를 기반으로 랜덤한 카드 생성

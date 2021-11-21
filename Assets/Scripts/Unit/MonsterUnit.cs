@@ -42,7 +42,7 @@ namespace poorlord
                 DamageEvent DamageEvent = e as DamageEvent;
                 if (DamageEvent.Target == (Unit)this)
                 {
-                    EffectManager.Instance.CreateEffect("SwordImpactRed", this.gameObject.transform.position + new Vector3(-0.1f, 0.4f, 0), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+                    GameManager.Instance.EffectSystem.CreateEffect("SwordImpactRed", this.gameObject.transform.position + new Vector3(-0.1f, 0.4f, 0), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
                     DamageEvent newDamageEvent = DamageEvent.Create(DamageEvent.Publisher, DamageEvent.Target, DamageEvent.Damage);
 
                     HP -= newDamageEvent.Damage;
@@ -96,7 +96,7 @@ namespace poorlord
             GameManager.Instance.MessageSystem.Publish(MonsterDeadEvent.Create(this, UnitPosition));
             UnitAnimator.SetBool("dead", true);
             yield return new WaitForSeconds(0.2f);
-            EffectManager.Instance.CreateEffect("DeathStandard", this.gameObject.transform.position + new Vector3(0, 0.1f, -0.1f), new Vector3(0.25f, 0.25f, 0.25f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            GameManager.Instance.EffectSystem.CreateEffect("DeathStandard", this.gameObject.transform.position + new Vector3(0, 0.1f, -0.1f), new Vector3(0.25f, 0.25f, 0.25f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
             SoundManager.Instance.PlaySfx("Weird0" + Random.Range(1, 5), 0.1f);
             yield return new WaitForSeconds(0.1f);
             float alpha = spriteRenderer.material.color.a;

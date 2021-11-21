@@ -36,6 +36,7 @@ namespace poorlord
         // 해당 타일에 속해있는 몬스터 유닛의 정보 
         private List<MonsterUnit> containMonsterUnitList = new List<MonsterUnit>();
 
+        [SerializeField]
         // 해당 타일에 속해있는 플레이어 유닛의 정보
         private PlayerUnit containPlayerUnit;
 

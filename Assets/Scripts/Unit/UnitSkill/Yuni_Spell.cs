@@ -15,7 +15,7 @@ namespace poorlord
         private IEnumerator Spell_Attack(Unit caster, Unit target, int damage)
         {
             SoundManager.Instance.PlaySfx("Weird03", 0.3f);
-            ParticleSystem effect = EffectManager.Instance.CreateEffect("SymbolMissilePurple", caster.gameObject.transform.transform.position + new Vector3(-0.3f, 0.5f, 0.4f)
+            ParticleSystem effect = GameManager.Instance.EffectSystem.CreateEffect("SymbolMissilePurple", caster.gameObject.transform.transform.position + new Vector3(-0.3f, 0.5f, 0.4f)
                 , new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(0, 0, 0)));
 
             Vector3 startPos = effect.gameObject.transform.position;
@@ -36,9 +36,9 @@ namespace poorlord
             {
                 SoundManager.Instance.PlaySfx("Weird04", 0.3f);
                 GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(caster, target, damage));
-                EffectManager.Instance.CreateEffect("SymbolExplosionPurple", effect.gameObject.transform.position, new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
+                GameManager.Instance.EffectSystem.CreateEffect("SymbolExplosionPurple", effect.gameObject.transform.position, new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
             }
-            EffectManager.Instance.ReleaseEffect("SymbolMissilePurple", effect);
+            GameManager.Instance.EffectSystem.ReleaseEffect("SymbolMissilePurple", effect);
             PoolManager.Instance.Release<Yuni_Spell>("Prefabs/Yuni_Spell", this);
         }
     }

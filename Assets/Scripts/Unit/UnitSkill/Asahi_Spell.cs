@@ -15,7 +15,7 @@ namespace poorlord
         private IEnumerator Spell_Attack(Unit caster, Unit target, int damage)
         {
             SoundManager.Instance.PlaySfx("Explosion8", 0.3f);
-            ParticleSystem effect = EffectManager.Instance.CreateEffect("PoisonMissileGreen", caster.gameObject.transform.transform.position + new Vector3(-0.3f, 0.5f, 0.4f)
+            ParticleSystem effect = GameManager.Instance.EffectSystem.CreateEffect("PoisonMissileGreen", caster.gameObject.transform.transform.position + new Vector3(-0.3f, 0.5f, 0.4f)
                 , new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(0, 0, 0)));
 
             Vector3 startPos = effect.gameObject.transform.position;
@@ -45,7 +45,7 @@ namespace poorlord
                     List<MonsterUnit> m = TileManager.Instance.GetContainMonsterUnitList((int)targetPos.x + i, (int)targetPos.z + j);
                     if (m != null)
                     {
-                        EffectManager.Instance.CreateEffect("DeathGreen", new Vector3((int)targetPos.x + i, 0, (int)targetPos.z + j), new Vector3(0.15f, 0.15f, 0.15f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+                        GameManager.Instance.EffectSystem.CreateEffect("DeathGreen", new Vector3((int)targetPos.x + i, 0, (int)targetPos.z + j), new Vector3(0.15f, 0.15f, 0.15f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
                         for (int k = 0; k < m.Count; k++)
                             targetList.Add(m[k]);
                     }
@@ -58,7 +58,7 @@ namespace poorlord
                     GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(caster, targetList[i], damage));
             }
 
-            EffectManager.Instance.ReleaseEffect("PoisonMissileGreen", effect);
+            GameManager.Instance.EffectSystem.ReleaseEffect("PoisonMissileGreen", effect);
             PoolManager.Instance.Release<Asahi_Spell>("Prefabs/Asahi_Spell", this);
         }
     }

@@ -14,7 +14,7 @@ namespace poorlord
 
         private IEnumerator Arrow_Attack(Unit caster, Unit target, int damage)
         {
-            ParticleSystem effect = EffectManager.Instance.CreateEffect("AcidMissileRed", caster.gameObject.transform.transform.position + new Vector3(-0.3f, 0.5f, 0.1f)
+            ParticleSystem effect = GameManager.Instance.EffectSystem.CreateEffect("AcidMissileRed", caster.gameObject.transform.transform.position + new Vector3(-0.3f, 0.5f, 0.1f)
                 , new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(0, 0, 0)));
 
             Vector3 startPos = effect.gameObject.transform.position;
@@ -35,9 +35,9 @@ namespace poorlord
             {
                 SoundManager.Instance.PlaySfx("GunShot05", 0.2f);
                 GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(caster, target, damage));
-                EffectManager.Instance.CreateEffect("AcidExplosionRed", effect.gameObject.transform.position, new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
+                GameManager.Instance.EffectSystem.CreateEffect("AcidExplosionRed", effect.gameObject.transform.position, new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
             }
-            EffectManager.Instance.ReleaseEffect("AcidMissileRed", effect);
+            GameManager.Instance.EffectSystem.ReleaseEffect("AcidMissileRed", effect);
             PoolManager.Instance.Release<Shiori_Arrow>("Prefabs/Shiori_Arrow", this);
         }
     }

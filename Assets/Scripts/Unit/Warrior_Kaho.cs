@@ -82,8 +82,8 @@ namespace poorlord
                 GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(this, Target, CalculateDamage()));
 
                 SoundManager.Instance.PlaySfx("ExplosionNuke", 0.3f);
-                EffectManager.Instance.CreateEffect(ATTACK_EFFECT_NAME, Target.gameObject.transform.position, ATTACK_EFFECT_SCALE, ATTACK_EFFECT_ROTATE, 2);
-                EffectManager.Instance.CreateEffect("NukeExplosionRed", Target.gameObject.transform.position, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
+                GameManager.Instance.EffectSystem.CreateEffect(ATTACK_EFFECT_NAME, Target.gameObject.transform.position, ATTACK_EFFECT_SCALE, ATTACK_EFFECT_ROTATE, 2);
+                GameManager.Instance.EffectSystem.CreateEffect("NukeExplosionRed", Target.gameObject.transform.position, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
             }
         }
     }

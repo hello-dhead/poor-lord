@@ -108,7 +108,7 @@ namespace poorlord
 
             Vector3 effect_pos = this.gameObject.transform.position + ((Target.transform.position - this.gameObject.transform.position).normalized * 0.3f);
             effect_pos.y = 0.2f;
-            EffectManager.Instance.CreateEffect("PickupExplosionBlue", effect_pos, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            GameManager.Instance.EffectSystem.CreateEffect("PickupExplosionBlue", effect_pos, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
             SoundManager.Instance.PlaySfx("SlimeHit", 0.2f);
         }
     }

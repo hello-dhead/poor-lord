@@ -9,14 +9,11 @@ namespace poorlord
 {
     public class GameManager : MonoSingleton<GameManager>, IEventListener
     {
-        // 매 프레임 업데이트되야하는 해시셋 아직까지는 우선순위가 필요없지만 추후 필요하게 되면 리스트로 교체
-        private HashSet<IUpdatable> updateHashSet;
-
-        // 다음 프레임이 시작될 때 추가 될 업데이트
-        private List<IUpdatable> addUpdateList;
-
-        // 다음 프레임이 시작될 때 삭제 될 업데이트
-        private List<IUpdatable> removeUpdateList;
+        /// <summary>
+        /// GameManager에서 돌려주는 업데이트가 필요하거나 
+        /// GameManager의 생성 이후 호출되어야 하는 클래스는 System으로 분류해서 GameManager에서 관리하도록
+        /// 그 외 GameManager에 의존하지 않는 클래스는 별개의 Manager로 분류 
+        /// </summary>
 
         // 이벤트 관리,처리하는 메세지 시스템
         public MessageSystem MessageSystem;
@@ -29,6 +26,18 @@ namespace poorlord
 
         // 보상 관련 모든 처리를 하는 시스템
         public RewardSystem RewardSystem;
+
+        // 이펙트 관련 모든 처리를 하는 시스템
+        public EffectSystem EffectSystem;
+
+        // 매 프레임 업데이트되야하는 해시셋
+        private HashSet<IUpdatable> updateHashSet = new HashSet<IUpdatable>();
+
+        // 다음 프레임이 시작될 때 추가 될 업데이트
+        private List<IUpdatable> addUpdateList = new List<IUpdatable>();
+
+        // 다음 프레임이 시작될 때 삭제 될 업데이트
+        private List<IUpdatable> removeUpdateList = new List<IUpdatable>();
 
         private int stage = 0;
 
@@ -46,17 +55,13 @@ namespace poorlord
         {
             Fade.Instance.FadeOut(0.5f);
 
-            updateHashSet = new HashSet<IUpdatable>();
-            addUpdateList = new List<IUpdatable>();
-            removeUpdateList = new List<IUpdatable>();
-
             MessageSystem = new MessageSystem();
             BattleSystem = new BattleSystem();
             CardSystem = new CardSystem();
             RewardSystem = new RewardSystem();
+            EffectSystem = new EffectSystem();
 
             MessageSystem.Subscribe(typeof(BattleStageEndEvent), this);
-
             StartBattleStage();
         }
 
@@ -96,7 +101,7 @@ namespace poorlord
             SoundManager.Instance.PlayBGM("Forest", 0.2f);
             Camera camera = Camera.main;
             camera.transform.position = new Vector3(4, 5.2f, -2.1f);
-            ParticleSystem dust = EffectManager.Instance.CreateEffect("ForestDust", camera.transform.position + new Vector3(0, -1.5f, 2), new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)));
+            ParticleSystem dust = GameManager.Instance.EffectSystem.CreateEffect("ForestDust", camera.transform.position + new Vector3(0, -1.5f, 2), new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)));
             dust.transform.SetParent(camera.transform);
 
             MessageSystem.Publish(BattleStageStartEvent.Create(stage));

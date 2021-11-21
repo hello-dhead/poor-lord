@@ -148,7 +148,7 @@ namespace poorlord
         {
             yield return new WaitForSeconds(1f);
             Fade.Instance.FadeIn(1);
-            EffectManager.Instance.RemoveAllEffect();
+            GameManager.Instance.EffectSystem.RemoveAllEffect();
             yield return new WaitForSeconds(1f);
 
             GameManager.Instance.RemoveUpdate(this);

@@ -15,7 +15,7 @@ namespace poorlord
         private IEnumerator Spell_Attack(Unit caster, Unit target, int damage)
         {
             SoundManager.Instance.PlaySfx("NukeLaunch", 0.2f);
-            ParticleSystem effect = EffectManager.Instance.CreateEffect("NukeMissileRed", caster.gameObject.transform.transform.position + new Vector3(-0.3f, 0.5f, 0.4f)
+            ParticleSystem effect = GameManager.Instance.EffectSystem.CreateEffect("NukeMissileRed", caster.gameObject.transform.transform.position + new Vector3(-0.3f, 0.5f, 0.4f)
                 , new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(0, 0, 0)));
 
             Vector3 startPos = effect.gameObject.transform.position;
@@ -36,9 +36,9 @@ namespace poorlord
             {
                 SoundManager.Instance.PlaySfx("ExplosionNuke", 0.2f);
                 GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(caster, target, damage));
-                EffectManager.Instance.CreateEffect("NukeExplosionRed", effect.gameObject.transform.position, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
+                GameManager.Instance.EffectSystem.CreateEffect("NukeExplosionRed", effect.gameObject.transform.position, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
             }
-            EffectManager.Instance.ReleaseEffect("NukeMissileRed", effect);
+            GameManager.Instance.EffectSystem.ReleaseEffect("NukeMissileRed", effect);
             PoolManager.Instance.Release<Nian_Spell>("Prefabs/Nian_Spell", this);
         }
     }

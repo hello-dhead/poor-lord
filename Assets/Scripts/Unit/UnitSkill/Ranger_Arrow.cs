@@ -14,7 +14,7 @@ namespace poorlord
 
         private IEnumerator Arrow_Attack(Unit caster, Unit target, int damage)
         {
-            ParticleSystem effect = EffectManager.Instance.CreateEffect("RocketRed", caster.gameObject.transform.transform.position + new Vector3(-0.7f, 0.5f, 0.2f)
+            ParticleSystem effect = GameManager.Instance.EffectSystem.CreateEffect("RocketRed", caster.gameObject.transform.transform.position + new Vector3(-0.7f, 0.5f, 0.2f)
                 , new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(0, 0, 0)));
 
             Vector3 startPos = effect.gameObject.transform.position;
@@ -35,9 +35,9 @@ namespace poorlord
             {
                 SoundManager.Instance.PlaySfx("GunShot03", 0.7f);
                 GameManager.Instance.MessageSystem.Publish(DamageEvent.Create(caster, target, damage));
-                EffectManager.Instance.CreateEffect("RocketExplosionRed", effect.gameObject.transform.position, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+                GameManager.Instance.EffectSystem.CreateEffect("RocketExplosionRed", effect.gameObject.transform.position, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
             }
-            EffectManager.Instance.ReleaseEffect("RocketRed", effect);
+            GameManager.Instance.EffectSystem.ReleaseEffect("RocketRed", effect);
             PoolManager.Instance.Release<Ranger_Arrow>("Prefabs/Ranger_Arrow", this);
         }
     }
