@@ -17,6 +17,7 @@ namespace poorlord
             if ( eventData.button == PointerEventData.InputButton.Left 
                 && GameManager.Instance.BattleSystem.Gold >= drawGold && GameManager.Instance.CardSystem.DrawCard() )
             {
+                animator.Rebind();
                 animator.Play("DrawButtonPay");
                 GameManager.Instance.BattleSystem.SpendGold(drawGold);
             }

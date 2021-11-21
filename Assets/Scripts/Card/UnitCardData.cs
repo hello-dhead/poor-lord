@@ -25,6 +25,7 @@ namespace poorlord
         {
             if (TileManager.Instance.CheckBuildableUnit(pos.x, pos.z) && GameManager.Instance.BattleSystem.SpendGold(Cost))
             {
+                GameManager.Instance.EffectSystem.CreateEffect("NovaBlue", pos, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
                 PlayerUnit platerUnit = (PlayerUnit)FieldObjectManager.Instance.CreateUnit(unit);
                 platerUnit.Init(pos, buffList);
                 return true;

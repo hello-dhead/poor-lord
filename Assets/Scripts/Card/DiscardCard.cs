@@ -19,7 +19,8 @@ namespace poorlord
             if (eventData.button == PointerEventData.InputButton.Left && GameManager.Instance.BattleSystem.Gold >= discardGold)
             {
                 GameManager.Instance.CardSystem.DiscardFirstCard();
-                //animator.Play("DrawButtonPay");
+                animator.Rebind();
+                animator.Play("DiscardButtonPay");
                 GameManager.Instance.BattleSystem.SpendGold(discardGold);
             }
         }
