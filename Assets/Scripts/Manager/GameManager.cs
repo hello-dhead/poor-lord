@@ -39,6 +39,9 @@ namespace poorlord
         // 다음 프레임이 시작될 때 삭제 될 업데이트
         private List<IUpdatable> removeUpdateList = new List<IUpdatable>();
 
+        [SerializeField]
+        private GameObject uiCanvas;
+
         private int stage = 0;
 
         public void AddUpdate(IUpdatable updatable)
@@ -53,8 +56,6 @@ namespace poorlord
 
         private void Start()
         {
-            Fade.Instance.FadeOut(0.5f);
-
             MessageSystem = new MessageSystem();
             BattleSystem = new BattleSystem();
             CardSystem = new CardSystem();
@@ -62,7 +63,8 @@ namespace poorlord
             EffectSystem = new EffectSystem();
 
             MessageSystem.Subscribe(typeof(BattleStageEndEvent), this);
-            StartBattleStage();
+
+            Opening();
         }
 
         private void Update()
@@ -96,13 +98,65 @@ namespace poorlord
         // TODO: 사막, 얼음맵 출현하도록 수정 필요
         public void StartBattleStage()
         {
+            string theme = "Desert";
+            if (stage == 1)
+            {
+                theme = "Ice";
+                TileManager.Instance.CreateTileMap((TileTheme)1, 12, 3);
+            }
+            else if(stage == 2)
+            {
+                TileManager.Instance.CreateTileMap((TileTheme)2, 9, 5);
+            }
+            else
+            {
+                int map = UnityEngine.Random.Range(0, 3);
+                int x = UnityEngine.Random.Range(8, 13);
+                int z = UnityEngine.Random.Range(3, 6);
+                TileManager.Instance.CreateTileMap((TileTheme)map, x, z);
+
+                switch (map)
+                {
+                    case 0:
+                        theme = "Forest";
+                        break;
+                    case 1:
+                        theme = "Ice";
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            SoundManager.Instance.PlayBGM(theme, 0.2f);
+            Camera camera = Camera.main;
+            camera.transform.position = new Vector3(4, 5.2f, -2.1f);
+            ParticleSystem dust = GameManager.Instance.EffectSystem.CreateEffect(theme + "Dust", camera.transform.position + new Vector3(0, -1.5f, 2), new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)));
+            dust.transform.SetParent(camera.transform);
+
+            MessageSystem.Publish(BattleStageStartEvent.Create(stage));
+            stage++;
+        }
+
+        public void Opening()
+        {
+            Fade.Instance.FadeOut(0.5f);
+
+            uiCanvas.SetActive(false);
+
             TileManager.Instance.CreateTileMap((TileTheme)0, 10, 4);
 
             SoundManager.Instance.PlayBGM("Forest", 0.2f);
             Camera camera = Camera.main;
-            camera.transform.position = new Vector3(4, 5.2f, -2.1f);
+            camera.transform.position = new Vector3(5, 5.2f, -2.1f);
             ParticleSystem dust = GameManager.Instance.EffectSystem.CreateEffect("ForestDust", camera.transform.position + new Vector3(0, -1.5f, 2), new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)));
             dust.transform.SetParent(camera.transform);
+        }
+
+        public void OpeningStart()
+        {
+            uiCanvas.SetActive(true);
+            uiCanvas = null;
 
             MessageSystem.Publish(BattleStageStartEvent.Create(stage));
             stage++;

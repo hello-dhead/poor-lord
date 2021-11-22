@@ -338,6 +338,11 @@ namespace poorlord
             return GetPathFromPos(monsterCastlePos);
         }
 
+        public Vector3Int GetMonsterCastlePos()
+        {
+            return monsterCastlePos;
+        }
+
         // 블락이 추가된다면 지나갈 수 있는 길이 있는지 체크
         public bool CheckOverlapPath(Vector3Int currentPosition, List<Vector3Int> newBlockPath)
         {

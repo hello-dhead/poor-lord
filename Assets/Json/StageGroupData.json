@@ -3,19 +3,34 @@
 	[
 		{"MonsterGroupList":
 			[
-				{"MonsterType":"Bat","MonsterHP":100,"MonsterDamage":50},
-				{"MonsterType":"Kong","MonsterHP":100,"MonsterDamage":50},
-				{"MonsterType":"Skeleton","MonsterHP":100,"MonsterDamage":50},
-				{"MonsterType":"Mushroom","MonsterHP":100,"MonsterDamage":50},
-				{"MonsterType":"Slime","MonsterHP":100,"MonsterDamage":50}
+				{"MonsterType":"Bat","MonsterHP":100,"MonsterDamage":0,"SummonTerm":4},
+				{"MonsterType":"Slime","MonsterHP":200,"MonsterDamage":100,"SummonTerm":4},
+				{"MonsterType":"Bat","MonsterHP":100,"MonsterDamage":0,"SummonTerm":3},
+				{"MonsterType":"Bat","MonsterHP":100,"MonsterDamage":0,"SummonTerm":3},
+				{"MonsterType":"Slime","MonsterHP":200,"MonsterDamage":100,"SummonTerm":3},
+				{"MonsterType":"Slime","MonsterHP":200,"MonsterDamage":100,"SummonTerm":2},
+				{"MonsterType":"Slime","MonsterHP":200,"MonsterDamage":100,"SummonTerm":2}
 			]
 		},
 		{"MonsterGroupList":
 			[
-				{"MonsterType":"Slime","MonsterHP":300,"MonsterDamage":100},
-				{"MonsterType":"Slime","MonsterHP":300,"MonsterDamage":100},
-				{"MonsterType":"Slime","MonsterHP":300,"MonsterDamage":100}
+				{"MonsterType":"Skeleton","MonsterHP":300,"MonsterDamage":100,"SummonTerm":2},
+				{"MonsterType":"Mushroom","MonsterHP":300,"MonsterDamage":100,"SummonTerm":4}
 			]
-		}			
+		},
+		{"MonsterGroupList":
+			[
+				{"MonsterType":"Kong","MonsterHP":400,"MonsterDamage":100,"SummonTerm":2}
+			]
+		},
+		{"MonsterGroupList":
+			[
+				{"MonsterType":"Bat","MonsterHP":300,"MonsterDamage":100,"SummonTerm":2},
+				{"MonsterType":"Kong","MonsterHP":400,"MonsterDamage":50,"SummonTerm":4},
+				{"MonsterType":"Skeleton","MonsterHP":300,"MonsterDamage":50,"SummonTerm":4},
+				{"MonsterType":"Mushroom","MonsterHP":300,"MonsterDamage":50,"SummonTerm":4},
+				{"MonsterType":"Slime","MonsterHP":200,"MonsterDamage":50,"SummonTerm":4}
+			]
+		}
 	]
 }
