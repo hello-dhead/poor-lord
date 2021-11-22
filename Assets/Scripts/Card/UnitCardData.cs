@@ -23,13 +23,21 @@ namespace poorlord
         // 유닛 소환
         public override bool Spend(Vector3Int pos)
         {
-            if (TileManager.Instance.CheckBuildableUnit(pos.x, pos.z) && GameManager.Instance.BattleSystem.SpendGold(Cost))
+            if (TileManager.Instance.CheckBuildableUnit(pos.x, pos.z))
             {
-                GameManager.Instance.EffectSystem.CreateEffect("NovaBlue", pos, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
+                if(GameManager.Instance.BattleSystem.SpendGold(Cost) == false)
+                {
+                    NarrationBox.Instance.ShowNarration("골드가 부족합니다");
+                    return false;
+                }
+
+                SoundManager.Instance.PlaySfx("Summon", 0.5f);
+                GameManager.Instance.EffectSystem.CreateEffect("NovaBlue", pos, new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
                 PlayerUnit platerUnit = (PlayerUnit)FieldObjectManager.Instance.CreateUnit(unit);
                 platerUnit.Init(pos, buffList);
                 return true;
             }
+            NarrationBox.Instance.ShowNarration("설치할 수 없는 위치입니다");
             return false;
         }
 

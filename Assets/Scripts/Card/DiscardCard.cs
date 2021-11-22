@@ -16,10 +16,10 @@ namespace poorlord
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Left && GameManager.Instance.BattleSystem.Gold >= discardGold)
+            if (eventData.button == PointerEventData.InputButton.Left && GameManager.Instance.BattleSystem.Gold >= discardGold && GameManager.Instance.CardSystem.DiscardFirstCard())
             {
-                GameManager.Instance.CardSystem.DiscardFirstCard();
                 animator.Rebind();
+                SoundManager.Instance.PlaySfx("Discard", 0.3f);
                 animator.Play("DiscardButtonPay");
                 GameManager.Instance.BattleSystem.SpendGold(discardGold);
             }

@@ -18,6 +18,7 @@ namespace poorlord
                 && GameManager.Instance.BattleSystem.Gold >= drawGold && GameManager.Instance.CardSystem.DrawCard() )
             {
                 animator.Rebind();
+                SoundManager.Instance.PlaySfx("Coin", 0.3f);
                 animator.Play("DrawButtonPay");
                 GameManager.Instance.BattleSystem.SpendGold(drawGold);
             }

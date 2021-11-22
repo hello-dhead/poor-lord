@@ -30,8 +30,14 @@ namespace poorlord
                 checkTileList[i] += pos;
             }
 
-            if (TileManager.Instance.CheckBuildableTileList(checkTileList) && GameManager.Instance.BattleSystem.CheckOverlapMonsterPath(checkTileList) && GameManager.Instance.BattleSystem.SpendGold(Cost))
+            if (TileManager.Instance.CheckBuildableTileList(checkTileList) && GameManager.Instance.BattleSystem.CheckOverlapMonsterPath(checkTileList))
             {
+                if (GameManager.Instance.BattleSystem.SpendGold(Cost) == false)
+                {
+                    NarrationBox.Instance.ShowNarration("골드가 부족합니다");
+                    return false;
+                }
+
                 playerTile.Init(pos);
                 for (int i = 0; i < checkTileList.Count; i++)
                 {
@@ -41,6 +47,7 @@ namespace poorlord
                 GameManager.Instance.BattleSystem.ChangeMonsterPath();
                 return true;
             }
+            NarrationBox.Instance.ShowNarration("설치할 수 없는 위치입니다");
             FieldObjectManager.Instance.ReleaseTile(block, playerTile);
             return false;
         }
