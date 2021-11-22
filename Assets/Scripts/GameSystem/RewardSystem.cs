@@ -40,9 +40,9 @@ namespace poorlord
         {
             Init();
 
-            yield return new WaitForSeconds(0.5f);
             SoundManager.Instance.PlayBGM("Reward");
-            Fade.Instance.FadeOut(1);
+            yield return new WaitForSeconds(0.5f);
+            Fade.Instance.FadeOut(0.5f);
         }
 
         public void UpdateFrame(float dt)

@@ -44,19 +44,21 @@ namespace poorlord
         private float supplyGold = 0.5f;
 
         // 초기 골드량
-        private int stageStartGold = 20;
+        private int stageStartGold = 3;
 
         // 몬스터가 성으로 가는 경로
         private List<List<Vector3Int>> monsterPathList = new List<List<Vector3Int>>();
-
-        // TODO: 나중에 스테이지 별로 소환 시간 다르게 해야하면 데이터 안에 넣는 리팩토링 필요
-        private readonly float SUMMON_DELAY = 5;
+        
+        // 소환 간격
+        private float summonDelay = 1;
 
         // 골드 텍스트 스프라이트
         private Text goldText = GameObject.Find("GoldText").GetComponent<Text>();
         // 스테이지 텍스트 스프라이트
         private Text stageText = GameObject.Find("StageText").GetComponent<Text>();
 
+        // 클리어 UI
+        private GameObject clearUI = GameObject.Find("Clear");
 
         public BattleSystem()
         {
@@ -79,6 +81,9 @@ namespace poorlord
 
             // 골드 초기량으로 고정
             Gold = stageStartGold;
+            goldText.text = Gold.ToString();
+
+            SetSummonDelay();
 
             GameManager.Instance.MessageSystem.Subscribe(typeof(MonsterDeadEvent), this);
 
@@ -100,19 +105,23 @@ namespace poorlord
                 goldText.text = Gold.ToString();
             }
 
-            if (currentSummonDelay >= SUMMON_DELAY)
+            if (currentSummonDelay >= summonDelay)
             {
                 currentSummonDelay = 0;
                 if(summonMonsterIndex < currentStageMonsterCount)
                 {
+                    GameManager.Instance.EffectSystem.CreateEffect("BeamUpPurple", TileManager.Instance.GetMonsterCastlePos(), new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
+
                     MonsterData monsterInfo = currentStageMonsterData[summonMonsterIndex];
+
                     string type = monsterInfo.MonsterType;
                     List<Vector3Int> monsterPath = monsterPathList[UnityEngine.Random.Range(0, monsterPathList.Count)];
                     MonsterUnit monster = (MonsterUnit)FieldObjectManager.Instance.CreateUnit(monsterInfo.MonsterType);
-
                     monster.Init(monsterInfo.MonsterHP, monsterInfo.MonsterDamage, monsterPath);
                     stageMonsterList.Add(monster);
+
                     summonMonsterIndex++;
+                    SetSummonDelay();
                 }
             }
         }
@@ -146,14 +155,55 @@ namespace poorlord
         // 배틀 종료
         IEnumerator EndBattleStage()
         {
-            yield return new WaitForSeconds(1f);
-            Fade.Instance.FadeIn(1);
+            CoroutineHandler.Start_Coroutine(ShowClear());
+            yield return new WaitForSeconds(3f);
+            Fade.Instance.FadeIn(0.5f);
             GameManager.Instance.EffectSystem.RemoveAllEffect();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
 
             GameManager.Instance.RemoveUpdate(this);
             GameManager.Instance.MessageSystem.Unsubscribe(typeof(MonsterDeadEvent), this);
             GameManager.Instance.MessageSystem.Publish(BattleStageEndEvent.Create());
+        }
+
+        // 클리어 연출
+        IEnumerator ShowClear()
+        {
+            while(clearUI.transform.localPosition.x < 0)
+            {
+                yield return new WaitForSeconds(Time.deltaTime);
+                clearUI.transform.localPosition += new Vector3(Time.deltaTime * 4000, 0, 0);
+            }
+            clearUI.transform.localPosition = new Vector3(0, 0, 0);
+            SoundManager.Instance.PlayBGM("GameClear", 0.2f);
+            Camera camera = Camera.main;
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-1f, -2f, 2), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(1f, -2f, 1), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(1.5f, -2f, 3), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-2f, -2f, 0.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(2f, -2f, 0.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-1.5f, -2f, 3), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(0.5f, -2f, 2f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-1f, -2f, 1.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(2f, -2f, 0.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+
+            yield return new WaitForSeconds(1f);
+
+            while (clearUI.transform.localPosition.x < 1000)
+            {
+                clearUI.transform.localPosition += new Vector3(Time.deltaTime * 4000, 0, 0);
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+
+            clearUI.transform.localPosition = new Vector3(-1000, 0, 0);
         }
 
         // 초기 골드 수급량 증가
@@ -183,7 +233,7 @@ namespace poorlord
         public bool CheckOverlapMonsterPath(List<Vector3Int> blockPathList)
         {
             // 몬스터성에서 부터 계산
-            if (TileManager.Instance.CheckOverlapPath(monsterPathList[0][0], blockPathList) == false)
+            if (TileManager.Instance.CheckOverlapPath(TileManager.Instance.GetMonsterCastlePos(), blockPathList) == false)
                 return false;
 
             for (int i = 0; i < stageMonsterList.Count; i++)
@@ -203,10 +253,19 @@ namespace poorlord
 
             for (int i = 0; i < stageMonsterList.Count; i++)
             {
-                // stageMonsterList[i].ChangePath(TileManager.Instance.GetPathFromPos(stageMonsterList[i].GetPathList()[0]));
                 List<Vector3Int> path = TileManager.Instance.GetPathFromPos(stageMonsterList[i].UnitPosition);
                 path.RemoveAt(0);
                 stageMonsterList[i].ChangePath(path);
+            }
+        }
+
+        // 다음 몬스터의 소환 딜레이 설정
+        private void SetSummonDelay()
+        {
+            if (summonMonsterIndex < currentStageMonsterCount)
+            {
+                MonsterData monsterInfo = currentStageMonsterData[summonMonsterIndex];
+                summonDelay = monsterInfo.SummonTerm;
             }
         }
     }

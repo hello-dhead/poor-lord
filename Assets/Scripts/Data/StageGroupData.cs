@@ -19,4 +19,5 @@ public class MonsterData
     public string MonsterType;
     public int MonsterHP;
     public int MonsterDamage;
+    public float SummonTerm;
 }

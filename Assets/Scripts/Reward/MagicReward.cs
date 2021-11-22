@@ -35,10 +35,12 @@ namespace poorlord
 
         public IEnumerator GetReward()
         {
+            SoundManager.Instance.PlaySfx("Gacha");
             GameManager.Instance.RewardSystem.IsGacha = true;
             animator.Play("Gacha_Magic_Pay");
             yield return new WaitForSeconds(3f);
 
+            SoundManager.Instance.PlaySfx("RewardGet", 0.8f);
             for (int i = 0; i < rewardCardList.Count; i++)
             {
                 rewardCardList[i].Init((BlockID)UnityEngine.Random.Range(0, (int)BlockID.BlockMax));

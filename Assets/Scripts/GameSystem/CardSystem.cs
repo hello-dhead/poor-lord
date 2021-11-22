@@ -126,7 +126,7 @@ namespace poorlord
         private Card CreateCard(CardData card)
         {
             Card new_card = PoolManager.Instance.GetOrCreateObjectPoolFromPath<Card>(CardPoolKey, "Prefabs/Card");
-            new_card.transform.parent = cardCanvas;
+            new_card.transform.SetParent(cardCanvas);
 
             new_card.transform.localPosition = new Vector3(-((SORT_DISTANCE / 2) * (CurrentHand.Count)) + (SORT_DISTANCE* (CurrentHand.Count)), -450, 0);
             new_card.transform.localScale = new Vector3(1, 1, 1);
@@ -180,8 +180,8 @@ namespace poorlord
         // 기본덱 제작
         private void CreateBasicDeck()
         {
-            //CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
-            //CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
+            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
+            CardDeckList.Add(new MagicCardData(1, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
 
             //CardDeckList.Add(new UnitCardData(3, "Shiori", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Shiori), new List<Buff>(), UnitID.Shiori));
             CardDeckList.Add(new UnitCardData(3, "Serika", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Serika), new List<Buff>(), UnitID.Serika));
@@ -217,10 +217,14 @@ namespace poorlord
         }
 
         // 첫 카드를 버림
-        public void DiscardFirstCard()
+        public bool DiscardFirstCard()
         {
             if(CurrentHand.Count > 0)
+            {
                 CurrentHand[0].Dispose();
+                return true;
+            }
+            return false;
         }
 
         public void RemoveCard(Card card)

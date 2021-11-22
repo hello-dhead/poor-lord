@@ -48,11 +48,13 @@ namespace poorlord
 
         public IEnumerator GetReward()
         {
+            SoundManager.Instance.PlaySfx("Gacha");
             GameManager.Instance.RewardSystem.IsGacha = true;
             animator.Play("Gacha_Gold_Pay");
             yield return new WaitForSeconds(3f);
 
             int randReward = UnityEngine.Random.Range(0, 2);
+            SoundManager.Instance.PlaySfx("RewardGet", 0.8f);
             if (randReward == 0)
             {
                 float randRewardAmount = ((float)UnityEngine.Random.Range(minGoldSupply, maxGoldSupply+1))/10;
