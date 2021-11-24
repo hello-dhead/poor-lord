@@ -36,7 +36,7 @@ namespace poorlord
             coinText.text = "3";
         }
 
-        IEnumerator SetReward()
+        private IEnumerator SetReward()
         {
             Init();
 

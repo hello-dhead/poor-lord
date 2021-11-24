@@ -43,7 +43,7 @@ namespace poorlord
                 {
                     TileManager.Instance.ChangeState(checkTileList[i], TileState.PlayerTile);
                 }
-
+                SoundManager.Instance.PlaySfx("Summon", 0.5f);
                 GameManager.Instance.BattleSystem.ChangeMonsterPath();
                 return true;
             }

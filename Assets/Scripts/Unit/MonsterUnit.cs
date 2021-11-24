@@ -147,6 +147,7 @@ namespace poorlord
             else
             {
                 Dispose(true);
+                GameManager.Instance.MessageSystem.Publish(MonsterDeadEvent.Create(this, UnitPosition));
             }
         }
 

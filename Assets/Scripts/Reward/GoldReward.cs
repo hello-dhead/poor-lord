@@ -59,7 +59,6 @@ namespace poorlord
             {
                 float randRewardAmount = ((float)UnityEngine.Random.Range(minGoldSupply, maxGoldSupply+1))/10;
                 GameManager.Instance.BattleSystem.AddSupplyGold(randRewardAmount);
-                Debug.Log(randRewardAmount);
                 rewardText.text = $"골드 수급량이 {randRewardAmount}만큼 상승하였습니다!";
             }
             else

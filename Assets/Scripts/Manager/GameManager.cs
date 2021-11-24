@@ -42,7 +42,7 @@ namespace poorlord
         [SerializeField]
         private GameObject uiCanvas;
 
-        private int stage = 0;
+        public int Stage { get; private set; }
 
         public void AddUpdate(IUpdatable updatable)
         {
@@ -56,6 +56,8 @@ namespace poorlord
 
         private void Start()
         {
+            Stage = 0;
+
             MessageSystem = new MessageSystem();
             BattleSystem = new BattleSystem();
             CardSystem = new CardSystem();
@@ -99,12 +101,12 @@ namespace poorlord
         public void StartBattleStage()
         {
             string theme = "Desert";
-            if (stage == 1)
+            if (Stage == 1)
             {
                 theme = "Ice";
                 TileManager.Instance.CreateTileMap((TileTheme)1, 12, 3);
             }
-            else if(stage == 2)
+            else if(Stage == 2)
             {
                 TileManager.Instance.CreateTileMap((TileTheme)2, 9, 5);
             }
@@ -134,8 +136,8 @@ namespace poorlord
             ParticleSystem dust = GameManager.Instance.EffectSystem.CreateEffect(theme + "Dust", camera.transform.position + new Vector3(0, -1.5f, 2), new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)));
             dust.transform.SetParent(camera.transform);
 
-            MessageSystem.Publish(BattleStageStartEvent.Create(stage));
-            stage++;
+            MessageSystem.Publish(BattleStageStartEvent.Create(Stage));
+            Stage++;
         }
 
         public void Opening()
@@ -158,8 +160,8 @@ namespace poorlord
             uiCanvas.SetActive(true);
             uiCanvas = null;
 
-            MessageSystem.Publish(BattleStageStartEvent.Create(stage));
-            stage++;
+            MessageSystem.Publish(BattleStageStartEvent.Create(Stage));
+            Stage++;
         }
 
         public bool OnEvent(IEvent e)

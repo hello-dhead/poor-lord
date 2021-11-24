@@ -26,7 +26,7 @@ namespace poorlord
                 StartCoroutine("SetNextStage");
         }
 
-        IEnumerator SetNextStage()
+        private IEnumerator SetNextStage()
         {
             isAlreadyClick = true;
             Fade.Instance.FadeIn(1);
@@ -41,7 +41,7 @@ namespace poorlord
             cardCanvas.gameObject.SetActive(true);
 
             isAlreadyClick = false;
-            Fade.Instance.FadeOut(1);
+            Fade.Instance.FadeOut(0.5f);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace poorlord
             StartCoroutine(FadeOutCoroutine(time));
         }
 
-        IEnumerator FadeInCoroutine(float time)
+        private IEnumerator FadeInCoroutine(float time)
         {
             float start = 0;
             float end = 1f;
@@ -39,7 +39,7 @@ namespace poorlord
             }
         }
 
-        IEnumerator FadeOutCoroutine(float time)
+        private IEnumerator FadeOutCoroutine(float time)
         {
             float start = 1f;
             float end = 0;
