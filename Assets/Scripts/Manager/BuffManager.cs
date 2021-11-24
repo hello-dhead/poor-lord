@@ -11,7 +11,7 @@ namespace poorlord
     public class BuffManager : Singleton<BuffManager>
     {
         // 버프 리스트
-        static List<Buff> buffList = new List<Buff>();
+        private static List<Buff> buffList = new List<Buff>();
 
         static BuffManager()
         {
@@ -21,6 +21,13 @@ namespace poorlord
             buffList.Add(new BuffIncreasedHPTwice());
             buffList.Add(new BuffGateKeeper());
             buffList.Add(new BuffBerserker());
+            buffList.Add(new BuffAvenger());
+            buffList.Add(new BuffGuardian());
+            buffList.Add(new BuffVanguard());
+            buffList.Add(new BuffVampire());
+            buffList.Add(new BuffVulture());
+            buffList.Add(new BuffWarmonger());
+            buffList.Add(new BuffReaper());
         }
 
         // 랜덤한 버프 리턴
