@@ -6,7 +6,7 @@ using System;
 namespace poorlord
 {
     /// <summary>
-    /// 몬스터가 자기가 있는 타일에 들어 올 때마다 체력을 10퍼센트 회복 maxHP를 넘을 수는 없음
+    /// 몬스터가 자기가 있는 타일에 들어 올 때마다 공격력이 10 증가
     /// </summary>
     public class BuffBerserker : ContinuousBuff
     {
@@ -36,9 +36,10 @@ namespace poorlord
                 TileEnterEvent tileEnter = e as TileEnterEvent;
 
                 PlayerUnit playertarget = Target as PlayerUnit;
-                Debug.Log(TileManager.Instance.GetContainPlayerUnit(tileEnter.EnterTilePos.x, tileEnter.EnterTilePos.z));
                 if (TileManager.Instance.GetContainPlayerUnit(tileEnter.EnterTilePos.x, tileEnter.EnterTilePos.z) == playertarget)
                 {
+                    GameManager.Instance.EffectSystem.CreateEffect("BeamUpRed", Target.UnitPosition + new Vector3(0, 0.2f, -0.2f), 
+                        new Vector3(0.3f, 0.3f, 0.3f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
                     Target.AddAdditionalDamage(10);
                 }
             }

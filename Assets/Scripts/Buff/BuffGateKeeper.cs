@@ -38,6 +38,7 @@ namespace poorlord
                 PlayerUnit playertarget = Target as PlayerUnit;
                 if (TileManager.Instance.GetContainPlayerUnit(tileEnter.EnterTilePos.x, tileEnter.EnterTilePos.z) == playertarget)
                 {
+                    GameManager.Instance.EffectSystem.CreateEffect("HealExplosionGreen", Target.UnitPosition + new Vector3(0, 0.4f, -0.1f), new Vector3(0.5f, 0.5f, 0.5f), Quaternion.Euler(new Vector3(-90, 0, 0)), 1);
                     int hp = playertarget.HP;
                     if (hp + (int)(hp * 0.1) < playertarget.MaxHP)
                     {
