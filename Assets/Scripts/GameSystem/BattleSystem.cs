@@ -145,7 +145,14 @@ namespace poorlord
                 deadMonsterCount++;
                 if (deadMonsterCount >= currentStageMonsterCount)
                 {
-                    CoroutineHandler.Start_Coroutine(EndBattleStage());
+                    if (GameManager.Instance.Stage + 1 >= stageGroupData.StageDataGroup.Count)
+                    {
+                        CoroutineHandler.Start_Coroutine(Ending());
+                    }
+                    else
+                    {
+                        CoroutineHandler.Start_Coroutine(EndBattleStage());
+                    }
                 }
                 return true;
             }
@@ -153,7 +160,7 @@ namespace poorlord
         }
 
         // 배틀 종료
-        IEnumerator EndBattleStage()
+        private IEnumerator EndBattleStage()
         {
             CoroutineHandler.Start_Coroutine(ShowClear());
             yield return new WaitForSeconds(3f);
@@ -167,7 +174,7 @@ namespace poorlord
         }
 
         // 클리어 연출
-        IEnumerator ShowClear()
+        private IEnumerator ShowClear()
         {
             while(clearUI.transform.localPosition.x < 0)
             {
@@ -176,26 +183,9 @@ namespace poorlord
             }
             clearUI.transform.localPosition = new Vector3(0, 0, 0);
             SoundManager.Instance.PlayBGM("GameClear", 0.2f);
-            Camera camera = Camera.main;
-            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-1f, -2f, 2), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
-            yield return new WaitForSeconds(0.15f);
-            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(1f, -2f, 1), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
-            yield return new WaitForSeconds(0.15f);
-            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(1.5f, -2f, 3), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
-            yield return new WaitForSeconds(0.15f);
-            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-2f, -2f, 0.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
-            yield return new WaitForSeconds(0.15f);
-            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(2f, -2f, 0.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
-            yield return new WaitForSeconds(0.15f);
-            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-1.5f, -2f, 3), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
-            yield return new WaitForSeconds(0.15f);
-            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(0.5f, -2f, 2f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
-            yield return new WaitForSeconds(0.15f);
-            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-1f, -2f, 1.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
-            yield return new WaitForSeconds(0.15f);
-            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(2f, -2f, 0.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            CoroutineHandler.Start_Coroutine(ShowConfetti());
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2.2f);
 
             while (clearUI.transform.localPosition.x < 1000)
             {
@@ -204,6 +194,40 @@ namespace poorlord
             }
 
             clearUI.transform.localPosition = new Vector3(-1000, 0, 0);
+        }
+
+        // 엔딩 연출
+        private IEnumerator Ending()
+        {
+            SoundManager.Instance.PlayBGM("Ending");
+            SoundManager.Instance.PlaySfx("Firework", 0.1f);
+
+            GameObject endingUI = GameObject.Find("Ending");
+            GameObject.Find("UICanvas").SetActive(false);
+            GameObject.Find("CardCanvas").SetActive(false);
+
+            endingUI.transform.GetChild(0).gameObject.SetActive(true);
+            CoroutineHandler.Start_Coroutine(ShowConfetti());
+
+            float startScale = 0.1f;
+            float endScale = 1;
+            float time = 0;
+            float endTime = 0.15f;
+            while (time < endTime)
+            {
+                float progress = Mathf.Lerp(startScale, endScale, time/endTime);
+                endingUI.transform.localScale = new Vector3(progress, progress, progress);
+
+                time += Time.deltaTime;
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+            yield return new WaitForSeconds(0.9f);
+
+            while (true)
+            {
+                CoroutineHandler.Start_Coroutine(ShowConfetti());
+                yield return new WaitForSeconds(1.35f);
+            }
         }
 
         // 초기 골드 수급량 증가
@@ -267,6 +291,30 @@ namespace poorlord
                 MonsterData monsterInfo = currentStageMonsterData[summonMonsterIndex];
                 summonDelay = monsterInfo.SummonTerm;
             }
+        }
+
+        // 클리어나 엔딩에 쓰이는 빵빠레 연출
+        private IEnumerator ShowConfetti()
+        {
+            Camera camera = Camera.main;
+
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-1f, -2f, 2), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(1f, -2f, 1), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(1.5f, -2f, 3), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-2f, -2f, 0.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(2f, -2f, 0.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-1.5f, -2f, 3), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(0.5f, -2f, 2f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(-1f, -2f, 1.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
+            yield return new WaitForSeconds(0.15f);
+            GameManager.Instance.EffectSystem.CreateEffect("ConfettiExplosion", camera.transform.position + new Vector3(2f, -2f, 0.5f), new Vector3(0.4f, 0.4f, 0.4f), Quaternion.Euler(new Vector3(-90, 0, 0)), 2);
         }
     }
 }
