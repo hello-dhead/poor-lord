@@ -71,6 +71,17 @@ namespace poorlord
             backGroundSound.Stop();
         }
 
+        // 프레임 드랍을 방지하기 위해 일부 BGM들은 미리 생성
+        public void Preload(string key)
+        {
+            string path = CLIP_PATH + key;
+            if (audioClipDic.ContainsKey(key) == false)
+            {
+                AudioClip clip = Resources.Load<AudioClip>(path);
+                audioClipDic.Add(key, clip);
+            }
+        }
+
         // 캐시에서 클립을 얻어온다.
         private AudioClip GetClip(string key)
         {

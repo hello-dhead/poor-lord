@@ -66,6 +66,11 @@ namespace poorlord
 
             MessageSystem.Subscribe(typeof(BattleStageEndEvent), this);
 
+            SoundManager.Instance.Preload("Forest");
+            SoundManager.Instance.Preload("Desert");
+            SoundManager.Instance.Preload("Ice");
+            SoundManager.Instance.Preload("Ending");
+
             Opening();
         }
 
@@ -96,8 +101,7 @@ namespace poorlord
                 updatable.UpdateFrame(dt);
             }
         }
-
-        // TODO: 사막, 얼음맵 출현하도록 수정 필요
+        
         public void StartBattleStage()
         {
             string theme = "Desert";
