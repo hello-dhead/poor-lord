@@ -140,7 +140,7 @@ namespace poorlord
         // 카드를 뽑는다
         public bool DrawCard()
         {
-            if(CurrentStageDeck.Count == 0)
+            if(CurrentStageDeck.Count == 0 || CurrentHand.Count > 4)
                 return false;
 
             int randCardNum = UnityEngine.Random.Range(0, CurrentStageDeck.Count);
