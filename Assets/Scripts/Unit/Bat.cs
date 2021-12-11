@@ -20,7 +20,7 @@ namespace poorlord
                 UnitAnimator.SetBool("dead", false);
             }
 
-            gameObject.transform.GetChild(0).transform.position = new Vector3(0 + Random.Range(-0.1f, 0.1f), 1f, -0.3f + Random.Range(-0.1f, 0.1f));
+            gameObject.transform.GetChild(0).transform.localPosition = new Vector3(Random.Range(-0.1f, 0.1f), 1f, -0.3f + Random.Range(-0.1f, 0.1f));
 
             unitName = "Bat";
 

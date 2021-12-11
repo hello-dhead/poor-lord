@@ -39,10 +39,10 @@ namespace poorlord
         }
 
         // 이펙트 생성
-        public ParticleSystem CreateEffect(string key, Vector3 pos, Vector3 scale, Quaternion rotate, float lifeTime = 999)
+        public ParticleSystem CreateEffect(string key, Vector3 pos, Vector3 scale, Quaternion rotate, float lifeTime = 999, int count = 5)
         {
             string path = EFFECT_PATH + key;
-            ParticleSystem result = PoolManager.Instance.GetOrCreateObjectPoolFromPath<ParticleSystem>(path);
+            ParticleSystem result = PoolManager.Instance.GetOrCreateObjectPoolFromPath<ParticleSystem>(path, path, count);
 
             Effect e = new Effect(key, result, lifeTime);
             effectList.Add(e);

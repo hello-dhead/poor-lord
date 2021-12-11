@@ -112,7 +112,7 @@ namespace poorlord
 
         public sealed override void Dispose(bool isReleaseImmediately)
         {
-            pathList = null;
+            pathList.Clear();
 
             // 업데이트에서 제거
             GameManager.Instance.RemoveUpdate(this);

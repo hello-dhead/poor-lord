@@ -9,7 +9,7 @@ namespace poorlord
     {
         private readonly int MAX_HP = 800;
         private readonly int DAMAGE = 75;
-        private readonly float ATTACK_DELAY = 1.5f;
+        private readonly float ATTACK_DELAY = 1f;
 
         /// <summary>
         /// 유닛명

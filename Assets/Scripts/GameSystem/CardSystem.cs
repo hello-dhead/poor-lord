@@ -32,7 +32,7 @@ namespace poorlord
         // 카드가 드러날 y
         private readonly int SORT_Y_POS = -180;
 
-        // 카드가 드러날 y
+        // 카드 정렬 스피드
         private readonly int SORT_SPEED = 4;
 
         // 카드 스프라이트
@@ -114,7 +114,11 @@ namespace poorlord
             else if(eventType == typeof(BattleStageEndEvent))
             {
                 for (int i = 0; i < CurrentHand.Count; i++)
+                {
                     CurrentHand[i].Dispose();
+                    i--;
+                }
+                CurrentHand.Clear();
                 return true;
             }
             return false;
@@ -181,10 +185,14 @@ namespace poorlord
         {
             CardDeckList.Add(new MagicCardData(3, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
             CardDeckList.Add(new MagicCardData(3, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
+            CardDeckList.Add(new MagicCardData(3, "1x1 Block", GetCardFrame(CardValue.Bronze), GetSprite(BlockID.PlayerTile1x1), BlockID.PlayerTile1x1));
 
             CardDeckList.Add(new UnitCardData(3, "Serika", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Serika), new List<Buff>(), UnitID.Serika));
             CardDeckList.Add(new UnitCardData(3, "Alice", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Alice), new List<Buff>(), UnitID.Alice));
             CardDeckList.Add(new UnitCardData(3, "Yuni", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Yuni), new List<Buff>(), UnitID.Yuni));
+            CardDeckList.Add(new UnitCardData(3, "Asahi", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Asahi), new List<Buff>(), UnitID.Asahi));
+            CardDeckList.Add(new UnitCardData(3, "Fuyuko", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Fuyuko), new List<Buff>(), UnitID.Fuyuko));
+            CardDeckList.Add(new UnitCardData(3, "Ranger", GetCardFrame(CardValue.Bronze), GetSprite(UnitID.Ranger), new List<Buff>(), UnitID.Ranger));
         }
 
         // 유닛ID와 밸류를 기반으로 랜덤한 카드 생성

@@ -44,7 +44,7 @@ namespace poorlord
         private float supplyGold = 0.5f;
 
         // 초기 골드량
-        private int stageStartGold = 3;
+        private int stageStartGold = 9;
 
         // 몬스터가 성으로 가는 경로
         private List<List<Vector3Int>> monsterPathList = new List<List<Vector3Int>>();
@@ -58,7 +58,13 @@ namespace poorlord
         private Text stageText = GameObject.Find("StageText").GetComponent<Text>();
 
         // 클리어 UI
-        private GameObject clearUI = GameObject.Find("Clear");
+        readonly private GameObject clearUI = GameObject.Find("Clear");
+
+        readonly private GameObject endingUI = GameObject.Find("Ending");
+
+        readonly private GameObject canvasUI = GameObject.Find("UICanvas");
+
+        readonly private GameObject cardCanvas = GameObject.Find("CardCanvas");
 
         public BattleSystem()
         {
@@ -202,9 +208,8 @@ namespace poorlord
             SoundManager.Instance.PlayBGM("Ending");
             SoundManager.Instance.PlaySfx("Firework", 0.1f);
 
-            GameObject endingUI = GameObject.Find("Ending");
-            GameObject.Find("UICanvas").SetActive(false);
-            GameObject.Find("CardCanvas").SetActive(false);
+            canvasUI.SetActive(false);
+            cardCanvas.SetActive(false);
 
             endingUI.transform.GetChild(0).gameObject.SetActive(true);
             CoroutineHandler.Start_Coroutine(ShowConfetti());

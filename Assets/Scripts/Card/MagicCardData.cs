@@ -35,6 +35,7 @@ namespace poorlord
                 if (GameManager.Instance.BattleSystem.SpendGold(Cost) == false)
                 {
                     NarrationBox.Instance.ShowNarration("골드가 부족합니다");
+                    FieldObjectManager.Instance.ReleaseTile(block, playerTile);
                     return false;
                 }
 

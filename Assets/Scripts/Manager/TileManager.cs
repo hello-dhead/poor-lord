@@ -269,7 +269,8 @@ namespace poorlord
         {
             for (int i = 0; i < checkTileList.Count; i++)
             {
-                if (tileList.Count <= checkTileList[i].x || tileList[0].Count <= checkTileList[i].z || tileList[checkTileList[i].x][checkTileList[i].z].CheckBuildable() == false)
+                if (tileList.Count <= checkTileList[i].x || tileList[0].Count <= checkTileList[i].z || checkTileList[i].x < 0 || 
+                    checkTileList[i].z < 0 || tileList[checkTileList[i].x][checkTileList[i].z].CheckBuildable() == false)
                 {
                     return false;
                 }

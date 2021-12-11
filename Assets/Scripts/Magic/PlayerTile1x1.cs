@@ -8,8 +8,7 @@ namespace poorlord
     {
         private readonly CardValue TILE_VALUE = CardValue.Bronze;
         private readonly string TILE_NAME = "1x1 BLOCK";
-
-        // TODO : 미리 생성해야 체크 가능 / 개선 가능할까?
+        
         public override List<Vector3Int> CheckTile
         {
             get
