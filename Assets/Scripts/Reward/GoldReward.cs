@@ -24,10 +24,10 @@ namespace poorlord
         private Text rewardText;
 
         // 최소 골드 수급량 증가 계수
-        private int minGoldSupply = 5;
+        private int minGoldSupply = 1;
 
         // 최대 골드 수급량 증가 계수
-        private int maxGoldSupply = 15;
+        private int maxGoldSupply = 5;
 
         // 최소 시작 골드 개수
         private int minStartGold = 1;
