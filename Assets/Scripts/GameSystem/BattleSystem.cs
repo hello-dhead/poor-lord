@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System;
 using System.IO;
 using Assets.Scripts.Commons;
+using System.Reflection;
 
 namespace poorlord
 {
@@ -92,6 +93,7 @@ namespace poorlord
             SetSummonDelay();
 
             GameManager.Instance.MessageSystem.Subscribe(typeof(MonsterDeadEvent), this);
+            GameManager.Instance.MessageSystem.Subscribe(typeof(CreateBlockEvent), this);
 
             monsterPathList.Clear();
             for (int i = 0; i < 4; i++)
@@ -162,6 +164,12 @@ namespace poorlord
                 }
                 return true;
             }
+            else if (eventType == typeof(CreateBlockEvent))
+            {
+                CreateBlockEvent createBlockEvent = e as CreateBlockEvent;
+
+                ReplaceOverlapPath(createBlockEvent.CheckTileList);
+            }
             return false;
         }
 
@@ -176,6 +184,7 @@ namespace poorlord
 
             GameManager.Instance.RemoveUpdate(this);
             GameManager.Instance.MessageSystem.Unsubscribe(typeof(MonsterDeadEvent), this);
+            GameManager.Instance.MessageSystem.Unsubscribe(typeof(CreateBlockEvent), this);
             GameManager.Instance.MessageSystem.Publish(BattleStageEndEvent.Create());
         }
 
@@ -273,13 +282,42 @@ namespace poorlord
             return true;
         }
 
-        // 몬스터와 default Path를 새로 설정
-        public void ChangeMonsterPath()
+        // 설치된 타일과 중복되는 경로를 체크 후 대체
+        private void ReplaceOverlapPath(List<Vector3Int> checkTileList)
         {
-            monsterPathList.Clear();
-            for (int i = 0; i < 4; i++)
-                monsterPathList.Add(TileManager.Instance.GetPathFromMonsterCastle());
+            bool replacedPath = false;
+            for (int i = 0; i < monsterPathList.Count; i++)
+            {
+                for (int j = 0; j < monsterPathList[i].Count; j++)
+                {
+                    bool replacedCurrentPath = false;
+                    for (int k = 0; k < checkTileList.Count; k++)
+                    {
+                        if (monsterPathList[i][j] == checkTileList[k])
+                        {
+                            replacedPath = true;
+                            replacedCurrentPath = true;
+                            break;
+                        }
+                    }
+                    if (replacedCurrentPath == true)
+                    {
+                        monsterPathList[i] = TileManager.Instance.GetPathFromMonsterCastle();
+                        break;
+                    }
+                }
+            }
 
+            // 하나의 경로라도 변경되었다면 현재 필드에 존재하는 몬스터의 경로를 교체해준다.
+            if (replacedPath == true)
+            {
+                ChangeSummonedMonsterPath();
+            }
+        }
+
+        // 현재 소환된 몬스터의 경로를 변경
+        private void ChangeSummonedMonsterPath()
+        {
             for (int i = 0; i < stageMonsterList.Count; i++)
             {
                 List<Vector3Int> path = TileManager.Instance.GetPathFromPos(stageMonsterList[i].UnitPosition);

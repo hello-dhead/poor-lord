@@ -45,7 +45,7 @@ namespace poorlord
                     TileManager.Instance.ChangeState(checkTileList[i], TileState.PlayerTile);
                 }
                 SoundManager.Instance.PlaySfx("Summon", 0.5f);
-                GameManager.Instance.BattleSystem.ChangeMonsterPath();
+                GameManager.Instance.MessageSystem.Publish(CreateBlockEvent.Create(checkTileList));
                 return true;
             }
             NarrationBox.Instance.ShowNarration("설치할 수 없는 위치입니다");
