@@ -23,11 +23,6 @@ namespace poorlord
                 return Create<T>(key);
 
             GameObject prefab = Resources.Load<GameObject>(path);
-            if (prefab == null)
-            {
-                Debug.Log("잘못된 프리팹 경로");
-                return null;
-            }
 
             CreateObjectPool<T>(key, prefab, count);
             return Create<T>(key);
@@ -37,9 +32,6 @@ namespace poorlord
         public bool CreateObjectPool<T>(string key, GameObject prefab, int count = 5) where T : Component, new()
         {
             if (poolDictionary.ContainsKey(key) == true)
-                return false;
-
-            if (prefab == null)
                 return false;
 
             ObjectPool<T> newPool = new ObjectPool<T>(count, prefab);
@@ -54,8 +46,6 @@ namespace poorlord
                 return false;
 
             GameObject prefab = Resources.Load<GameObject>(path);
-            if (prefab == null)
-                return false;
 
             return CreateObjectPool<T>(key, prefab, count);
         }
