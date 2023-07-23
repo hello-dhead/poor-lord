@@ -15,25 +15,22 @@ namespace poorlord
 
         static BuffManager()
         {
-            buffList = new List<Buff>();
-            buffList.Add(new BuffAdditionalDamage());
-            buffList.Add(new BuffIncreaseDamageTwice());
-            buffList.Add(new BuffIncreasedHPTwice());
-            buffList.Add(new BuffGateKeeper());
-            buffList.Add(new BuffBerserker());
-            buffList.Add(new BuffAvenger());
-            buffList.Add(new BuffGuardian());
-            buffList.Add(new BuffVanguard());
-            buffList.Add(new BuffVampire());
-            buffList.Add(new BuffVulture());
-            buffList.Add(new BuffWarmonger());
-            buffList.Add(new BuffReaper());
+            var continuousBuffList = TypeUtility.GetTypesWithBaseType(typeof(ContinuousBuff));
+            var immediatelyBuffList = TypeUtility.GetTypesWithBaseType(typeof(ImmediatelyBuff));
+            for (int i = 0; i < continuousBuffList.Count; i++)
+            {
+                buffList.Add((Buff)System.Activator.CreateInstance(continuousBuffList[i]));
+            }
+            for (int i = 0; i < immediatelyBuffList.Count; i++)
+            {
+                buffList.Add((Buff)System.Activator.CreateInstance(immediatelyBuffList[i]));
+            }
         }
 
         // 랜덤한 버프 리턴
         public Buff GetRandomBuff()
         {
-            return buffList[UnityEngine.Random.Range(0, buffList.Count)].Copy();
+            return buffList[Random.Range(0, buffList.Count)].Copy();
         }
     }
 }
