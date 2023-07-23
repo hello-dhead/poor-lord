@@ -15,15 +15,15 @@ namespace poorlord
 
         static BuffManager()
         {
-            var continuousBuffList = TypeUtility.GetTypesWithBaseType(typeof(ContinuousBuff));
-            var immediatelyBuffList = TypeUtility.GetTypesWithBaseType(typeof(ImmediatelyBuff));
-            for (int i = 0; i < continuousBuffList.Count; i++)
+            var continuousBuffTypeList = TypeUtility.GetTypesWithBaseType(typeof(ContinuousBuff));
+            var immediatelyBuffTypeList = TypeUtility.GetTypesWithBaseType(typeof(ImmediatelyBuff));
+            foreach (var continuousBuffType in continuousBuffTypeList)
             {
-                buffList.Add((Buff)System.Activator.CreateInstance(continuousBuffList[i]));
+                buffList.Add((Buff)System.Activator.CreateInstance(continuousBuffType));
             }
-            for (int i = 0; i < immediatelyBuffList.Count; i++)
+            foreach (var immediatelyBuffType in immediatelyBuffTypeList)
             {
-                buffList.Add((Buff)System.Activator.CreateInstance(immediatelyBuffList[i]));
+                buffList.Add((Buff)System.Activator.CreateInstance(immediatelyBuffType));
             }
         }
 
