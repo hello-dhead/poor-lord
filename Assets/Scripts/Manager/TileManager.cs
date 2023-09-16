@@ -158,8 +158,8 @@ namespace poorlord
         // 현재 기본 타일, 물 매테리얼을 교체한다.
         private void SetCurrentMaterialOnPath(TileSet tileSet)
         {
-            this.currentTileMaterial = new List<List<Material>>();
-            this.currentWaterMaterial = new List<Material>();
+            currentTileMaterial = new List<List<Material>>();
+            currentWaterMaterial = new List<Material>();
 
             for (int i = 0; i < tileSet.BasicTileData.Count; i++)
             {

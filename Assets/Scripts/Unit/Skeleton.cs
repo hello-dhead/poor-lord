@@ -89,7 +89,7 @@ namespace poorlord
                     }
                     break;
                 case MonsterUnitState.Dead:
-                    StartCoroutine("Dead");
+                    StartCoroutine(Dead());
                     break;
                 default:
                     break;
@@ -98,7 +98,7 @@ namespace poorlord
 
         public sealed override void Attack()
         {
-            StartCoroutine("SkeletonAttack");
+            StartCoroutine(SkeletonAttack());
         }
 
         private IEnumerator SkeletonAttack()

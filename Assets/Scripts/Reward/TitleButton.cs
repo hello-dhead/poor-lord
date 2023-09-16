@@ -19,19 +19,19 @@ namespace poorlord
 
         private void Start()
         {
-            StartCoroutine("BlinkText");
+            StartCoroutine(BlinkText());
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
             if (isAlreadyClick == false)
-                StartCoroutine("StartGame");
+                StartCoroutine(StartGame());
         }
 
         private IEnumerator StartGame()
         {
             isAlreadyClick = true;
-            StopCoroutine("BlinkText");
+            StopCoroutine(BlinkText());
             textImage.gameObject.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             textImage.gameObject.SetActive(false);
 

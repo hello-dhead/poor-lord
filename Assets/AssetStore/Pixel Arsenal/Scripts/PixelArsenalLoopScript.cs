@@ -16,7 +16,7 @@ public class PixelArsenalLoopScript : MonoBehaviour {
 
 	public void PlayLoopingPEffect()
 	{
-		StartCoroutine("EffectLoop");
+		StartCoroutine(EffectLoop());
 	}
 	
 

@@ -29,7 +29,7 @@ namespace poorlord
             if (coin > 0 && GameManager.Instance.RewardSystem.IsGacha == false)
             {
                 coinText.text = (coin - 1).ToString();
-                StartCoroutine("GetReward");
+                StartCoroutine(GetReward());
             }
         }
 

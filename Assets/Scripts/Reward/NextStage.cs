@@ -23,7 +23,7 @@ namespace poorlord
         public void OnPointerClick(PointerEventData eventData)
         {
             if(isAlreadyClick == false)
-                StartCoroutine("SetNextStage");
+                StartCoroutine(SetNextStage());
         }
 
         private IEnumerator SetNextStage()

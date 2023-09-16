@@ -105,7 +105,7 @@ namespace poorlord
                     }
                     break;
                 case PlayerUnitState.Dead:
-                    StartCoroutine("Dead");
+                    StartCoroutine(Dead());
                     break;
                 default:
                     break;
