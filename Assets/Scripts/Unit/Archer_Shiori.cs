@@ -43,7 +43,7 @@ namespace poorlord
         {
             if (Target.HP > 0 && CheckMonsterInRange())
             {
-                StartCoroutine("AttackRoutine");
+                StartCoroutine(AttackRoutine());
                 UnitAnimator.SetBool("attack", true);
             }
             else

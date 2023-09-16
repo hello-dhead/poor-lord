@@ -89,7 +89,7 @@ namespace poorlord
                     }
                     break;
                 case MonsterUnitState.Dead:
-                    StartCoroutine("Dead");
+                    StartCoroutine(Dead());
                     break;
                 default:
                     break;
