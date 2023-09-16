@@ -11,7 +11,7 @@ namespace poorlord
     /// <summary>
     /// RewardSystem의 역할 : 
     /// </summary>
-    public class RewardSystem :IUpdatable, IEventListener
+    public class RewardSystem : IEventListener
     {
         public bool IsGacha = false;
 
@@ -26,27 +26,17 @@ namespace poorlord
             rewardCanvas.gameObject.SetActive(false);
         }
 
-        private void Init()
+        private IEnumerator SetReward()
         {
             rewardCanvas.gameObject.SetActive(true);
             uiCanvas.gameObject.SetActive(false);
             cardCanvas.gameObject.SetActive(false);
 
-            // 나중에 바꿀 수 있음
             coinText.text = "3";
-        }
-
-        private IEnumerator SetReward()
-        {
-            Init();
 
             SoundManager.Instance.PlayBGM("Reward");
             yield return new WaitForSeconds(0.5f);
             Fade.Instance.FadeOut(0.5f);
-        }
-
-        public void UpdateFrame(float dt)
-        {
         }
         
         public bool OnEvent(IEvent e)
