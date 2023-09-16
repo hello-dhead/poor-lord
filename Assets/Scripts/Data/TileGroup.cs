@@ -22,14 +22,14 @@ public class TileSet
 }
 
 [System.Serializable]
-public class BasicTileData
+public struct BasicTileData
 {
     public string MaterialTop;
     public string MaterialSide;
 }
 
 [System.Serializable]
-public class DecoTileData
+public struct DecoTileData
 {
     public string PrefabPath;
 }

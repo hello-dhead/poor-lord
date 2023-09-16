@@ -391,7 +391,7 @@ namespace poorlord
         }
     }
 
-    public class DecoTileListData
+    public struct DecoTileListData
     {
         public string key;
         public DecorationTile decoTile;
