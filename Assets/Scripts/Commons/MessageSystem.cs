@@ -89,7 +89,7 @@ namespace poorlord
         }
     }
 
-    public class RequestData
+    public struct RequestData
     {
         public Type key;
         public IEventListener listener;
